@@ -81,8 +81,8 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '',
-        password: ''
+        mobile: '13809811545',
+        password: '123456'
       },
       loginRules: {
         mobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
