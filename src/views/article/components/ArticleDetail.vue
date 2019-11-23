@@ -1,7 +1,6 @@
 <template>
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-
       <sticky :z-index="10" :class-name="'sub-navbar'">
         <span v-show="updateDate" class="timeTips" v-text="'更新于:'+updateDate" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
@@ -13,25 +12,42 @@
         <el-row>
 
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item class="input-text" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
                 标题
               </MDinput>
             </el-form-item>
-
           </el-col>
         </el-row>
-        <el-form-item prop="article_category_id">
-          <el-select v-model="postForm.article_category_id" placeholder="文章分类" name="article_category_id" required>
+        <el-form-item prop="category_id">
+          <el-select v-model="postForm.category_id" placeholder="文章分类" name="category_id" required>
             <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="content" class="article_content">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" :upload-config="uploadConfig" />
+        <el-form-item>
+          <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
+        </el-form-item>
+
+        <el-form-item prop="desc" class="article_content">
+          <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
         <el-form-item prop="image_uri">
           <Upload v-model="postForm.image_uri" :upload-config="uploadConfig" />
         </el-form-item>
+
+        <el-form-item class="input-text" prop="seo_title">
+          <MDinput v-model="postForm.seo_title" :maxlength="100" name="seo_title">
+            标题
+          </MDinput>
+        </el-form-item>
+
+        <el-form-item>
+          <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO简介" />
+        </el-form-item>
+
       </div>
     </el-form>
   </div>
@@ -48,8 +64,12 @@ import moment from 'moment'
 const defaultForm = {
   status: '',
   title: '', // 文章题目
-  content: '', // 文章内容
-  article_category_id: '', // 文章内容
+  intro: '', // 文章内容
+  desc: '', // 文章内容
+  seo_title: '',
+  seo_keywords: '',
+  seo_desc: '',
+  category_id: '', // 文章内容
   image_uri: '', // 文章图片
   id: undefined
 }
@@ -88,15 +108,13 @@ export default {
       updateDate: '',
       rules: {
         title: [{ validator: validateRequire }],
-        article_category_id: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }]
+        category_id: [{ validator: validateRequire }],
+        desc: [{ validator: validateRequire }]
       },
       tempRoute: {}
     }
   },
-  computed: {
-
-  },
+  computed: {},
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
@@ -171,40 +189,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
+  @import "~@/styles/mixin.scss";
+  .input-text {
+    margin-bottom: 40px
+  }
 
-.createPost-container {
-  position: relative;
+  .createPost-container {
+    position: relative;
 
-  .createPost-main-container {
-    padding: 40px 45px 20px 50px;
+    .createPost-main-container {
+      padding: 40px 45px 20px 50px;
 
-    .postInfo-container {
-      position: relative;
-      @include clearfix;
-      margin-bottom: 10px;
+      .postInfo-container {
+        position: relative;
+        @include clearfix;
+        margin-bottom: 10px;
 
-      .postInfo-container-item {
-        float: left;
+        .postInfo-container-item {
+          float: left;
+        }
       }
+    }
+
+    .word-counter {
+      width: 40px;
+      position: absolute;
+      right: 10px;
+      top: 0px;
     }
   }
 
-  .word-counter {
-    width: 40px;
-    position: absolute;
-    right: 10px;
-    top: 0px;
+  .article_content {
+    margin-bottom: 30px;
   }
-}
-.article_content{margin-bottom: 30px;}
-.article-textarea /deep/ {
-  textarea {
-    padding-right: 40px;
-    resize: none;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 1px solid #bfcbd9;
+
+  .article-textarea /deep/ {
+    textarea {
+      padding-right: 40px;
+      resize: none;
+      border: none;
+      border-radius: 0px;
+      border-bottom: 1px solid #bfcbd9;
+    }
   }
-}
 </style>
