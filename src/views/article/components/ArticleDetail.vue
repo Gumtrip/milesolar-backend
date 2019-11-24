@@ -37,7 +37,7 @@
 
         <el-form-item class="input-text" prop="seo_title">
           <MDinput v-model="postForm.seo_title" :maxlength="100" name="seo_title">
-            标题
+            seo标题
           </MDinput>
         </el-form-item>
 
@@ -45,7 +45,7 @@
           <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
         </el-form-item>
         <el-form-item>
-          <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO简介" />
+          <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" />
         </el-form-item>
 
       </div>

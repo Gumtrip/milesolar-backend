@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     imageUrl() {
-      return this.value
+      return process.env.VUE_APP_URL + this.value
     }
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res, file) {
-      this.emitInput(res.full_path)
+      this.emitInput(res.path)
     },
     beforeUpload(file) {
       const isImage = file.type === 'image/jpeg' || 'image/png' || 'image/gif'
