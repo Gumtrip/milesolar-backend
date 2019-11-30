@@ -31,8 +31,8 @@
         <template slot-scope="scope">
           <router-link :to="{name:'EditArticle',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
-            <el-button type="primary" size="small" icon="el-icon-delete" />
           </router-link>
+          <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
         </template>
       </el-table-column>
     </el-table>
@@ -48,6 +48,7 @@
 
 <script>
 import { fetchArticles } from '@/api/article'
+import { deleteArticle } from '@/api/article'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -85,6 +86,19 @@ export default {
         this.total = response.data.meta.total
         this.listLoading = false
       })
+    },
+    deleteItem(id) {
+      this.$confirm('确认删除？').then(() => {
+        deleteArticle(id).then(() => {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+        })
+      })
+        .catch((e) => {
+          console.log(e)
+        })
     }
   }
 }

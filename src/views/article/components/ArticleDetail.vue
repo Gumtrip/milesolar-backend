@@ -31,8 +31,8 @@
         <el-form-item prop="desc" class="article_content">
           <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
-        <el-form-item prop="image_uri">
-          <Upload v-model="postForm.image_uri" :upload-config="uploadConfig" />
+        <el-form-item prop="image">
+          <Upload v-model="postForm.image" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="input-text" prop="seo_title">
@@ -70,7 +70,7 @@ const defaultForm = {
   seo_keywords: '',
   seo_desc: '',
   category_id: '', // 文章内容
-  image_uri: '', // 文章图片
+  image: '', // 文章图片
   id: undefined
 }
 
@@ -102,7 +102,8 @@ export default {
       loading: false,
       uploadConfig: {
         data: {
-          model: 'article'
+          folder: 'article',
+          id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
       updateDate: '',

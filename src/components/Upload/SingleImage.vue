@@ -6,7 +6,7 @@
       :on-success="handleImageSuccess"
       :on-error="handleImageError"
       :before-upload="beforeUpload"
-      name="images"
+      name="image"
       class="image-uploader"
       drag
       :action="uploadUrl"
@@ -41,18 +41,18 @@ export default {
     },
     uploadConfig: {
       type: Object,
-      required: true
+      required: false
     }
   },
   data() {
     return {
       tempUrl: '',
-      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
+      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/image'
     }
   },
   computed: {
     imageUrl() {
-      return process.env.VUE_APP_URL + this.value
+      return this.value ? process.env.VUE_APP_URL + this.value : ''
     }
   },
   methods: {
@@ -120,7 +120,6 @@ export default {
                 height: 100%;
                 left: 0;
                 top: 0;
-                cursor: default;
                 text-align: center;
                 color: #fff;
                 opacity: 0;
@@ -128,7 +127,6 @@ export default {
                 background-color: rgba(0, 0, 0, .5);
                 transition: opacity .3s;
                 cursor: pointer;
-                text-align: center;
                 line-height: 200px;
                 .el-icon-delete {
                     font-size: 36px;

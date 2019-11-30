@@ -39,6 +39,12 @@ export function updateArticle(id, data) {
     data: data
   })
 }
+export function deleteArticle(id) {
+  return request({
+    url: 'admin/articles/' + id,
+    method: 'delete'
+  })
+}
 
 export function fetchArticleCategories(params) {
   return request({
