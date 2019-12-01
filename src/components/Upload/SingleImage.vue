@@ -41,6 +41,7 @@ export default {
     },
     uploadConfig: {
       type: Object,
+      default: () => { return [] },
       required: false
     }
   },

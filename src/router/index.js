@@ -166,6 +166,70 @@ export const asyncRoutes = [
       }
     ]
   },
+
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/list',
+    name: 'product',
+    meta: {
+      title: '产品',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/product/create'),
+        name: 'CreateProduct',
+        meta: { title: '新建产品', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/product/edit'),
+        name: 'EditArticle',
+        meta: { title: '编辑产', noCache: true, activeMenu: '/product/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/product/list'),
+        name: 'ProductList',
+        meta: { title: '产品列表', icon: 'list' }
+      }
+    ]
+  },
+  {
+    path: '/product_categories',
+    component: Layout,
+    redirect: '/product_categories/list',
+    name: 'product_categories',
+    meta: {
+      title: '产品分类',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/product_category/create'),
+        name: 'createArticleCategory',
+        meta: { title: '新增产品分类', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/product_category/edit'),
+        name: 'editProductCategories',
+        meta: { title: '编辑产品分类', noCache: true, activeMenu: '/product/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/product_category/list'),
+        name: 'productCategoriesList',
+        meta: { title: '产品分类列表', icon: 'list' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
