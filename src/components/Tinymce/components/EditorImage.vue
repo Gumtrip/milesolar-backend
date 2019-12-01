@@ -14,7 +14,7 @@
         class="editor-slide-upload"
         :action="uploadUrl"
         :data="uploadConfig.data"
-        name="images"
+        name="image"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -51,7 +51,7 @@ export default {
       dialogVisible: false,
       listObj: {},
       fileList: [],
-      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
+      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/image'
     }
   },
   methods: {
