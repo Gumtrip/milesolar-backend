@@ -22,10 +22,10 @@
         </el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">
-        Cancel
+        取消
       </el-button>
       <el-button type="primary" @click="handleSubmit">
-        Confirm
+        确认
       </el-button>
     </el-dialog>
   </div>
