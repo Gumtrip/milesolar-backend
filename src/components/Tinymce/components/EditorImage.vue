@@ -1,7 +1,7 @@
 <template>
   <div class="upload-container">
     <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      upload
+      上传
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
@@ -10,6 +10,7 @@
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
+        :on-error="handleImageError"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
         :action="uploadUrl"
@@ -33,6 +34,8 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
+import { Message } from 'element-ui'
+import { errorMessage } from '@/utils/api-handle'
 
 export default {
   name: 'EditorSlideUpload',
@@ -103,7 +106,17 @@ export default {
         }
         resolve(true)
       })
+    },
+    handleImageError(err, file, fileList) {
+      const errorMsg = errorMessage(JSON.parse(err.message))
+      this.handleRemove(file)
+      Message({
+        message: errorMsg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
+
   }
 }
 </script>
