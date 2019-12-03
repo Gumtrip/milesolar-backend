@@ -12,12 +12,21 @@
         <el-row>
 
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item class="input-text" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
                 标题
               </MDinput>
             </el-form-item>
-
+            <el-form-item>
+              <el-card>
+                <div slot="header">
+                  所属分类
+                </div>
+                <div>
+                  <el-tree :data="treeData" show-checkbox @check-change="handleCheckChange" />
+                </div>
+              </el-card>
+            </el-form-item>
           </el-col>
         </el-row>
       </div>
@@ -28,11 +37,12 @@
 <script>
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchProductCategory, createProductCategory, updateProductCategory } from '@/api/product'
+import { fetchProductCategory, createProductCategory, updateProductCategory, fetchProductCategoryTrees } from '@/api/product'
 
 const defaultForm = {
   title: '', // 文章题目
-  id: undefined
+  id: undefined,
+  parent_id: null
 }
 
 export default {
@@ -61,20 +71,48 @@ export default {
       postForm: Object.assign({}, defaultForm),
       categories: {},
       loading: false,
-      uploadConfig: {
-        data: {
-          model: 'article'
-        },
-        uploadUrl: 'http://top-top.com/api/admin/images'
-      },
       userListOptions: [],
       rules: {
         title: [{ validator: validateRequire }]
       },
-      tempRoute: {}
+      tempRoute: {},
+      categoryTrees: {}
     }
   },
-  computed: {},
+  computed: {
+    treeData() {
+      const tData = []
+      for (let i = 0, len = this.categoryTrees.length; i < len; i++) {
+        const first = this.categoryTrees[i]
+        tData.push({
+          label: first.title,
+          value: first.id,
+          children: []
+        })
+        if (first.children.length > 0) {
+          for (let j = 0, len = first.children.length; j < len; j++) {
+            const sec = first.children[j]
+            tData[i]['children'].push({
+              label: sec.title,
+              value: sec.id,
+              children: []
+            })
+            if (sec.children.length > 0) {
+              for (let k = 0, len = sec.children.length; k < len; k++) {
+                const third = sec.children[k]
+                tData[i]['children'][j]['children'].push({
+                  label: third.title,
+                  value: third.id,
+                  children: []
+                })
+              }
+            }
+          }
+        }
+      }
+      return tData
+    }
+  },
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
@@ -84,6 +122,7 @@ export default {
       this.postForm = Object.assign({}, defaultForm)
     }
     this.tempRoute = Object.assign({}, this.$route)
+    this.fetchTrees()
   },
   methods: {
     fetchData(id) {
@@ -97,14 +136,19 @@ export default {
         console.log(err)
       })
     },
-
+    async fetchTrees() {
+      const trees = await fetchProductCategoryTrees({
+        depth: 1
+      })
+      this.categoryTrees = trees.data
+    },
     setTagsViewTitle() {
-      const title = '编辑文章'
+      const title = '编辑产品分类'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑文章'
+      const title = '编辑产品分类'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -137,6 +181,15 @@ export default {
           this.loading = false
         }
       })
+    },
+    handleCheckChange(data, checked, indeterminate) {
+      if (checked) {
+        this.postForm.parent_id = data.value
+      } else {
+        this.postForm.parent_id = 0
+      }
+      console.log(data)
+      console.log(checked)
     }
 
   }
@@ -145,7 +198,9 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
-
+  .input-text {
+    margin-bottom: 40px
+  }
   .createPost-container {
     position: relative;
 

@@ -45,6 +45,13 @@ export function fetchProductCategories(params) {
     params: params
   })
 }
+export function fetchProductCategoryTrees(params) {
+  return request({
+    url: 'admin/product_category_trees',
+    method: 'get',
+    params: params
+  })
+}
 
 export function fetchProductCategory(id, params) {
   return request({

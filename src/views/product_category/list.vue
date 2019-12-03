@@ -9,15 +9,15 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'editProductCategories',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="分类">
+      <el-table-column width="180px" align="center" label="层级">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span>{{ scope.row.depth }}</span>
         </template>
       </el-table-column>
 
@@ -29,7 +29,7 @@
 
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
-          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}">
+          <router-link :to="{name:'editProductCategories',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit">
               修改
             </el-button>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { fetchArticleCategories } from '@/api/article'
+import { fetchProductCategories } from '@/api/product'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -81,7 +81,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchArticleCategories(this.listQuery).then(response => {
+      fetchProductCategories(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.total
         this.listLoading = false
