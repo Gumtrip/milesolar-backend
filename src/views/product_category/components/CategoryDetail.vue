@@ -17,15 +17,8 @@
                 标题
               </MDinput>
             </el-form-item>
-            <el-form-item>
-              <el-card>
-                <div slot="header">
-                  所属分类
-                </div>
-                <div>
-                  <el-tree :data="treeData" show-checkbox @check-change="handleCheckChange" />
-                </div>
-              </el-card>
+            <el-form-item label="所属分类">
+              <el-cascader v-model="postForm.parent_id" :options="treeData" :props="{ checkStrictly: true }" clearable @change="handleChange" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -42,7 +35,7 @@ import { fetchProductCategory, createProductCategory, updateProductCategory, fet
 const defaultForm = {
   title: '', // 文章题目
   id: undefined,
-  parent_id: null
+  parent_id: 0
 }
 
 export default {
@@ -82,34 +75,43 @@ export default {
   computed: {
     treeData() {
       const tData = []
+      // if(this.categoryTrees.length>0){
+      // tData.push({label: '无',value:0})//TODO 为什么这样写会报错？？？
+      // }
+
       for (let i = 0, len = this.categoryTrees.length; i < len; i++) {
         const first = this.categoryTrees[i]
         tData.push({
           label: first.title,
-          value: first.id,
-          children: []
+          value: first.id
         })
         if (first.children.length > 0) {
+          tData[i]['children'] = []
           for (let j = 0, len = first.children.length; j < len; j++) {
             const sec = first.children[j]
             tData[i]['children'].push({
               label: sec.title,
-              value: sec.id,
-              children: []
+              value: sec.id
             })
             if (sec.children.length > 0) {
+              tData[i]['children'][j]['children'] = []
+
               for (let k = 0, len = sec.children.length; k < len; k++) {
                 const third = sec.children[k]
                 tData[i]['children'][j]['children'].push({
                   label: third.title,
-                  value: third.id,
-                  children: []
+                  value: third.id
                 })
               }
             }
           }
         }
       }
+      if (this.categoryTrees.length > 0) {
+        tData.unshift({ label: '无', value: 0 })
+      }
+
+      console.log(tData)
       return tData
     }
   },
@@ -182,16 +184,9 @@ export default {
         }
       })
     },
-    handleCheckChange(data, checked, indeterminate) {
-      if (checked) {
-        this.postForm.parent_id = data.value
-      } else {
-        this.postForm.parent_id = 0
-      }
-      console.log(data)
-      console.log(checked)
+    handleChange(value) {
+      // this.postForm.parent_id = value[value.length - 1]
     }
-
   }
 }
 </script>
