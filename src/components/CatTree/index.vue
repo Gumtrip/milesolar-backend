@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-cascader :options="treeData" :props="{ checkStrictly: true }" clearable @change="handleChange" />
+    <el-cascader v-model="catId" :options="treeData" :props="{ checkStrictly: true ,emitPath: false }" clearable @change="handleChange" />
   </div>
 </template>
 
@@ -11,10 +11,16 @@ export default {
   props: {
     options: {
       default: () => function() { return [] }
+    },
+    defaultValue: {
+      type: Number,
+      default: null
     }
   },
   data() {
-    return {}
+    return {
+      catId: this.defaultValue
+    }
   },
   computed: {
     treeData() {
@@ -56,11 +62,11 @@ export default {
     }
   },
   created() {
-
+    console.log(this.defaultValue)
   },
   methods: {
     handleChange(value) {
-      this.$emit('input', value[value.length - 1])
+      this.$emit('input', value)
     }
   }
 }
