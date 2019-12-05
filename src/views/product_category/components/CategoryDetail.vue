@@ -10,7 +10,6 @@
 
       <div class="createPost-main-container">
         <el-row>
-
           <el-col :span="24">
             <el-form-item class="input-text" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
@@ -18,7 +17,7 @@
               </MDinput>
             </el-form-item>
             <el-form-item label="所属分类">
-              <el-cascader v-model="postForm.parent_id" :options="treeData" :props="{ checkStrictly: true }" clearable @change="handleChange" />
+              <cat-tree v-model="postForm.parent_id" :options="categoryTrees" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -30,17 +29,18 @@
 <script>
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
+import CatTree from '@/components/CatTree' //
 import { fetchProductCategory, createProductCategory, updateProductCategory, fetchProductCategoryTrees } from '@/api/product'
 
 const defaultForm = {
   title: '', // 文章题目
   id: undefined,
-  parent_id: 0
+  parent_id: null
 }
 
 export default {
   name: 'CategoryDetail',
-  components: { MDinput, Sticky },
+  components: { CatTree, MDinput, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -73,47 +73,6 @@ export default {
     }
   },
   computed: {
-    treeData() {
-      const tData = []
-      // if(this.categoryTrees.length>0){
-      // tData.push({label: '无',value:0})//TODO 为什么这样写会报错？？？
-      // }
-
-      for (let i = 0, len = this.categoryTrees.length; i < len; i++) {
-        const first = this.categoryTrees[i]
-        tData.push({
-          label: first.title,
-          value: first.id
-        })
-        if (first.children.length > 0) {
-          tData[i]['children'] = []
-          for (let j = 0, len = first.children.length; j < len; j++) {
-            const sec = first.children[j]
-            tData[i]['children'].push({
-              label: sec.title,
-              value: sec.id
-            })
-            if (sec.children.length > 0) {
-              tData[i]['children'][j]['children'] = []
-
-              for (let k = 0, len = sec.children.length; k < len; k++) {
-                const third = sec.children[k]
-                tData[i]['children'][j]['children'].push({
-                  label: third.title,
-                  value: third.id
-                })
-              }
-            }
-          }
-        }
-      }
-      if (this.categoryTrees.length > 0) {
-        tData.unshift({ label: '无', value: 0 })
-      }
-
-      console.log(tData)
-      return tData
-    }
   },
   created() {
     if (this.isEdit) {
@@ -183,10 +142,8 @@ export default {
           this.loading = false
         }
       })
-    },
-    handleChange(value) {
-      // this.postForm.parent_id = value[value.length - 1]
     }
+
   }
 }
 </script>
