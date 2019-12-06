@@ -1,50 +1,55 @@
 <template>
-  <div class="singleImageUpload2 upload-container">
+  <div class="">
     <el-upload
-      :data="dataObj"
-      :multiple="false"
-      :show-file-list="false"
+      :multiple="true"
+      list-type="picture-card"
       :on-success="handleImageSuccess"
+      :on-error="handleImageError"
+      :before-upload="beforeUpload"
+      :on-preview="handlePictureCardPreview"
+      name="image"
       class="image-uploader"
-      drag
-      action="https://httpbin.org/post"
+      :action="uploadUrl"
+      :data="uploadConfig.data"
     >
-      <i class="el-icon-upload" />
-      <div class="el-upload__text">
-        Drag或<em>点击上传</em>
-      </div>
+      <i class="el-icon-plus" />
     </el-upload>
-    <div v-show="imageUrl.length>0" class="image-preview">
-      <div v-show="imageUrl.length>1" class="image-preview-wrapper">
-        <img :src="imageUrl">
-        <div class="image-preview-action">
-          <i class="el-icon-delete" @click="rmImage" />
-        </div>
-      </div>
-    </div>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getToken } from '@/api/qiniu'
+import { errorMessage } from '@/utils/api-handle'
+import { Message } from 'element-ui'
 
 export default {
   name: 'SingleImageUpload2',
   props: {
     value: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => function() {
+        return []
+      }
+    },
+    uploadConfig: {
+      type: Object,
+      default: () => { return [] },
+      required: false
     }
   },
   data() {
     return {
       tempUrl: '',
-      dataObj: { token: '', key: '' }
+      dialogImageUrl: '',
+      dialogVisible: false,
+      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/image'
     }
   },
   computed: {
     imageUrl() {
-      return this.value
+      return this.value ? process.env.VUE_APP_URL + this.value : ''
     }
   },
   methods: {
@@ -54,77 +59,35 @@ export default {
     emitInput(val) {
       this.$emit('input', val)
     },
-    handleImageSuccess() {
-      this.emitInput(this.tempUrl)
+    handleImageSuccess(res, file) {
+      this.emitInput(res.path)
     },
-    beforeUpload() {
-      const _self = this
-      return new Promise((resolve, reject) => {
-        getToken().then(response => {
-          const key = response.data.qiniu_key
-          const token = response.data.qiniu_token
-          _self._data.dataObj.token = token
-          _self._data.dataObj.key = key
-          this.tempUrl = response.data.qiniu_url
-          resolve(true)
-        }).catch(() => {
-          reject(false)
-        })
+    beforeUpload(file) {
+      const isImage = file.type === 'image/jpeg' || 'image/png' || 'image/gif'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isImage) {
+        this.$message.error('上传图片只能是 JPG/PNG/GIF 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+      }
+      return isImage && isLt2M
+    },
+    handleImageError(err, file, fileList) {
+      const errorMsg = errorMessage(JSON.parse(err.message))
+      Message({
+        message: errorMsg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
       })
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.upload-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .image-uploader {
-    height: 100%;
-  }
-  .image-preview {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    border: 1px dashed #d9d9d9;
-    .image-preview-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .image-preview-action {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      cursor: default;
-      text-align: center;
-      color: #fff;
-      opacity: 0;
-      font-size: 20px;
-      background-color: rgba(0, 0, 0, .5);
-      transition: opacity .3s;
-      cursor: pointer;
-      text-align: center;
-      line-height: 200px;
-      .el-icon-delete {
-        font-size: 36px;
-      }
-    }
-    &:hover {
-      .image-preview-action {
-        opacity: 1;
-      }
-    }
-  }
-}
 </style>

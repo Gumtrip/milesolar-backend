@@ -34,7 +34,7 @@ import { fetchProductCategory, createProductCategory, updateProductCategory, fet
 
 const defaultForm = {
   title: '', // 文章题目
-  id: undefined,
+  id: null,
   parent_id: null
 }
 
@@ -75,15 +75,19 @@ export default {
   computed: {
   },
   created() {
+    const treeQuery = {
+      depth: 1
+    }
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.id = id
       this.fetchData(id)
+      treeQuery.id = id
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
     this.tempRoute = Object.assign({}, this.$route)
-    this.fetchTrees()
+    this.fetchTrees(treeQuery)
   },
   methods: {
     fetchData(id) {
@@ -97,10 +101,8 @@ export default {
         console.log(err)
       })
     },
-    async fetchTrees() {
-      const trees = await fetchProductCategoryTrees({
-        depth: 1
-      })
+    async fetchTrees(query) {
+      const trees = await fetchProductCategoryTrees(query)
       this.categoryTrees = trees.data
     },
     setTagsViewTitle() {

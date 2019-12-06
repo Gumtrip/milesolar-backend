@@ -61,6 +61,11 @@ export default {
       return tData
     }
   },
+  watch: {
+    defaultValue: function(newValue) {
+      return (this.catId = newValue)
+    }
+  },
   created() {
     console.log(this.defaultValue)
   },

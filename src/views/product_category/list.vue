@@ -17,7 +17,7 @@
 
       <el-table-column width="180px" align="center" label="层级">
         <template slot-scope="scope">
-          <span>{{ scope.row.depth }}</span>
+          <span>{{ (scope.row.depth+1) }}</span>
         </template>
       </el-table-column>
 

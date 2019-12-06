@@ -20,9 +20,7 @@
           </el-col>
         </el-row>
         <el-form-item prop="category_id">
-          <el-select v-model="postForm.category_id" placeholder="文章分类" name="category_id" required>
-            <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
-          </el-select>
+          <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
         </el-form-item>
         <el-form-item>
           <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
@@ -31,8 +29,8 @@
         <el-form-item prop="desc" class="article_content">
           <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
-        <el-form-item prop="image">
-          <Upload v-model="postForm.image" :upload-config="uploadConfig" />
+        <el-form-item prop="images">
+          <Upload v-model="postForm.images" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="input-text" prop="seo_title">
@@ -55,28 +53,28 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/SingleImage'
+import Upload from '@/components/Upload/SingleImage2'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticle, createArticle, fetchArticleCategories, updateArticle } from '@/api/article'
+import { fetchProduct, createProduct, updateProduct, fetchProductCategoryTrees } from '@/api/product'
 import moment from 'moment'
+import CatTree from '@/components/CatTree' //
 
 const defaultForm = {
-  status: '',
-  title: '', // 文章题目
-  intro: '', // 文章内容
-  desc: '', // 文章内容
+  title: '', // 产品题目
+  intro: '', // 产品内容
+  desc: '', // 产品内容
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',
-  category_id: '', // 文章内容
-  image: '', // 文章图片
+  category_id: null, // 产品内容
+  images: [], // 产品图片
   id: undefined
 }
 
 export default {
-  name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky },
+  name: 'ProductDetail',
+  components: { Tinymce, MDinput, Upload, Sticky, CatTree },
   props: {
     isEdit: {
       type: Boolean,
@@ -124,12 +122,12 @@ export default {
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
-    this.fetchArticleCategories()
+    this.fetchProductCategoryTrees()
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id).then(response => {
+      fetchProduct(id).then(response => {
         this.postForm = response.data
         // set tagsview title
         this.setTagsViewTitle()
@@ -140,17 +138,18 @@ export default {
         console.log(err)
       })
     },
-    async fetchArticleCategories() {
-      const res = await fetchArticleCategories()
-      this.categories = res.data.data
+    async fetchProductCategoryTrees() {
+      const res = await fetchProductCategoryTrees()
+      console.log(res.data)
+      this.categories = res.data
     },
     setTagsViewTitle() {
-      const title = '编辑文章'
+      const title = '编辑产品'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑文章'
+      const title = '编辑产品'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -160,9 +159,9 @@ export default {
           let res
           try {
             if (this.isEdit) {
-              res = await updateArticle(this.id, this.postForm)
+              res = await updateProduct(this.id, this.postForm)
             } else {
-              res = await createArticle(this.postForm)
+              res = await createProduct(this.postForm)
             }
 
             if (res.status === 201) {
