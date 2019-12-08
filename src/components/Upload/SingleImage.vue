@@ -47,7 +47,6 @@ export default {
   },
   data() {
     return {
-      tempUrl: '',
       uploadUrl: process.env.VUE_APP_BASE_API + 'admin/image'
     }
   },

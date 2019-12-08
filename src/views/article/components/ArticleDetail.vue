@@ -121,8 +121,6 @@ export default {
       const id = this.$route.params && this.$route.params.id
       this.id = id
       this.fetchData(id)
-    } else {
-      this.postForm = Object.assign({}, defaultForm)
     }
     this.fetchArticleCategories()
     this.tempRoute = Object.assign({}, this.$route)

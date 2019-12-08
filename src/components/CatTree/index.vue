@@ -10,6 +10,7 @@ export default {
   components: {},
   props: {
     options: {
+      type: Array,
       default: () => function() { return [] }
     },
     defaultValue: {
@@ -67,7 +68,6 @@ export default {
     }
   },
   created() {
-    console.log(this.defaultValue)
   },
   methods: {
     handleChange(value) {

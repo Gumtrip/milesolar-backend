@@ -186,8 +186,8 @@ export const asyncRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/product/edit'),
-        name: 'EditArticle',
-        meta: { title: '编辑产', noCache: true, activeMenu: '/product/list' },
+        name: 'EditProduct',
+        meta: { title: '编辑产品', noCache: true, activeMenu: '/product/list' },
         hidden: true
       },
       {
@@ -211,7 +211,7 @@ export const asyncRoutes = [
       {
         path: 'create',
         component: () => import('@/views/product_category/create'),
-        name: 'createArticleCategory',
+        name: 'createProductCategory',
         meta: { title: '新增产品分类', icon: 'edit' }
       },
       {

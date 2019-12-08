@@ -22,15 +22,12 @@
         <el-form-item prop="category_id">
           <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
-        </el-form-item>
 
         <el-form-item prop="desc" class="article_content">
-          <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
+          <Tinymce ref="editor" v-model="postForm.desc_0" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
         <el-form-item prop="images">
-          <Upload v-model="postForm.images" :upload-config="uploadConfig" />
+          <Upload ref="uploader" v-model="postForm.images" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="input-text" prop="seo_title">
@@ -62,12 +59,11 @@ import CatTree from '@/components/CatTree' //
 
 const defaultForm = {
   title: '', // 产品题目
-  intro: '', // 产品内容
-  desc: '', // 产品内容
+  desc_0: '', // 产品内容
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',
-  category_id: null, // 产品内容
+  category_id: null, // 产品分类
   images: [], // 产品图片
   id: undefined
 }
@@ -96,11 +92,11 @@ export default {
     return {
       id: undefined,
       postForm: Object.assign({}, defaultForm),
-      categories: {},
+      categories: [],
       loading: false,
       uploadConfig: {
         data: {
-          folder: 'article',
+          folder: 'product',
           id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
@@ -113,22 +109,28 @@ export default {
       tempRoute: {}
     }
   },
-  computed: {},
+  computed: {
+
+  },
+  watch: {
+
+  },
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.id = id
       this.fetchData(id)
-    } else {
-      this.postForm = Object.assign({}, defaultForm)
     }
     this.fetchProductCategoryTrees()
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     fetchData(id) {
-      fetchProduct(id).then(response => {
+      fetchProduct(id, {
+        include: ['category', 'images']
+      }).then(response => {
         this.postForm = response.data
+        this.postForm.images = this.imagesGroup(response.data.images)
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -140,7 +142,6 @@ export default {
     },
     async fetchProductCategoryTrees() {
       const res = await fetchProductCategoryTrees()
-      console.log(res.data)
       this.categories = res.data
     },
     setTagsViewTitle() {
@@ -163,9 +164,11 @@ export default {
             } else {
               res = await createProduct(this.postForm)
             }
-
             if (res.status === 201) {
-              this.postForm = {}
+              // TODO 不知道为什么这样写的话，你会发现defaultForm 的值已经改变了
+              // this.postForm = defaultForm
+              // this.postForm = {}
+              this.postForm.images.splice(0, this.postForm.images.length)// 不能够这样写 this.postForm.images=[]
               this.$refs.editor.setContent('')
               this.$notify({ title: '成功', message: '创建成功', type: 'success' })
             }
@@ -182,8 +185,14 @@ export default {
           this.loading = false
         }
       })
+    },
+    imagesGroup(images) {
+      const group = []
+      for (let i = 0; i < images.length; i++) {
+        group.push(images[i].path)
+      }
+      return group
     }
-
   }
 }
 </script>

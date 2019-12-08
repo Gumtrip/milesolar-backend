@@ -348,3 +348,43 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+/** typeof 升级版(typeof 经常混淆array、object、null)
+ *
+ * @param v
+ * @returns {string|"undefined"|"object"|"boolean"|"number"|"string"|"function"|"symbol"|"bigint"}
+ */
+export function getTypeName(v) {
+  const v_str = JSON.stringify(v)
+  if (typeof v === 'object') {
+    // 判断null
+    if (v_str === 'null') {
+      return 'null'
+    }
+    // 判断[]
+    if (v_str.charAt(0) === '[') {
+      return 'array'
+    }
+
+    // 判断{}
+    if (v_str.charAt(0) === '{') {
+      return 'object'
+    }
+
+    // 判断Date对象
+    if (v instanceof Date) {
+      return 'date'
+    }
+
+    // 其他...
+    return 'other'
+  } else if (typeof v === 'number') {
+    // 判断NaN
+    if (v_str === 'null') {
+      return 'nan'
+    }
+    return typeof v
+  } else {
+    return typeof v
+  }
+}
