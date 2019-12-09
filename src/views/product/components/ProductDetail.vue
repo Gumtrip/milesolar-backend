@@ -138,13 +138,14 @@ export default {
   methods: {
     fetchData(id) {
       fetchProduct(id, {
-        append: 'image_col,info_col'
+        append: 'image_group,info_group'
       }).then(response => {
         this.postForm = response.data
         // TODO 暂时想不到更好的方法
-        this.postForm.info_0_m = response.data.info_col.info_0_m
-        this.postForm.info_1_m = response.data.info_col.info_1_m
-        this.postForm.info_2_m = response.data.info_col.info_2_m
+        this.postForm.info_0_m = response.data.info_group.info_0_m
+        this.postForm.info_1_m = response.data.info_group.info_1_m
+        this.postForm.info_2_m = response.data.info_group.info_2_m
+        this.postForm.images = response.data.image_group
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -199,13 +200,6 @@ export default {
           this.loading = false
         }
       })
-    },
-    imagesGroup(images) {
-      const group = []
-      for (let i = 0; i < images.length; i++) {
-        group.push(images[i].path)
-      }
-      return group
     }
   }
 }
