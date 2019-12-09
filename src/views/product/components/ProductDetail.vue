@@ -138,7 +138,6 @@ export default {
   methods: {
     fetchData(id) {
       fetchProduct(id, {
-        include: ['infos'],
         append: 'image_col,info_col'
       }).then(response => {
         this.postForm = response.data
