@@ -23,9 +23,18 @@
           <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
         </el-form-item>
 
-        <el-form-item prop="desc" class="article_content">
-          <Tinymce ref="editor" v-model="postForm.desc_0" :height="400" :upload-config="uploadConfig" />
+        <el-form-item prop="info_0_m" class="article_content">
+          <Tinymce ref="editor" v-model="postForm.info_0_m" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
+
+        <el-form-item class="article_content">
+          <Tinymce ref="editor" v-model="postForm.info_1_m" :height="400" :upload-config="uploadConfig" />
+        </el-form-item>
+
+        <el-form-item class="article_content">
+          <Tinymce ref="editor" v-model="postForm.info_2_m" :height="400" :upload-config="uploadConfig" />
+        </el-form-item>
+
         <el-form-item prop="images">
           <Upload ref="uploader" v-model="postForm.images" :upload-config="uploadConfig" />
         </el-form-item>
@@ -59,7 +68,9 @@ import CatTree from '@/components/CatTree' //
 
 const defaultForm = {
   title: '', // 产品题目
-  desc_0: '', // 产品内容
+  info_0_m: '', // 产品内容
+  info_1_m: '', // 产品内容
+  info_2_m: '', // 产品内容
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',
@@ -127,10 +138,14 @@ export default {
   methods: {
     fetchData(id) {
       fetchProduct(id, {
-        include: ['category', 'images']
+        include: ['infos'],
+        append: 'image_col,info_col'
       }).then(response => {
         this.postForm = response.data
-        this.postForm.images = this.imagesGroup(response.data.images)
+        // TODO 暂时想不到更好的方法
+        this.postForm.info_0_m = response.data.info_col.info_0_m
+        this.postForm.info_1_m = response.data.info_col.info_1_m
+        this.postForm.info_2_m = response.data.info_col.info_2_m
         // set tagsview title
         this.setTagsViewTitle()
 
