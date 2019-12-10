@@ -19,7 +19,7 @@
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
-          Click upload
+          点击选择文件
         </el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">
