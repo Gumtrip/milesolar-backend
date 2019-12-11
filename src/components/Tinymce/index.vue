@@ -206,7 +206,7 @@ export default {
     async imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${process.env.VUE_APP_URL + v.response.path}" >`)
+        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.response.full_path}" >`)
       })
     }
   }
