@@ -81,8 +81,8 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '13809811545',
-        password: '123456'
+        mobile: '',
+        password: ''
       },
       loginRules: {
         mobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
@@ -109,6 +109,10 @@ export default {
     }
   },
   created() {
+    if (process.env.VUE_APP_URL.ENV === 'development') {
+      this.loginForm.mobile = '13809811545'
+      this.loginForm.password = '123456'
+    }
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
