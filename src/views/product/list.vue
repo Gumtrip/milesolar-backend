@@ -32,6 +32,9 @@
           <router-link :to="{name:'EditProduct',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
+          <a target="_blank" :href="baseUrl+'/products/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-view" />
+          </a>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
         </template>
       </el-table-column>
@@ -65,6 +68,7 @@ export default {
   },
   data() {
     return {
+      baseUrl: process.env.VUE_APP_URL,
       list: null,
       total: 0,
       listLoading: true,
