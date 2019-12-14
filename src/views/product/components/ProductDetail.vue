@@ -23,6 +23,10 @@
           <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
         </el-form-item>
 
+        <el-form-item>
+          <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="请输入简介" />
+        </el-form-item>
+
         <el-form-item prop="info_0_m" class="article_content">
           <Tinymce ref="editor" v-model="postForm.info_0_m" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
@@ -68,6 +72,7 @@ import CatTree from '@/components/CatTree' //
 
 const defaultForm = {
   title: '', // 产品题目
+  brief: '',
   info_0_m: '', // 产品内容
   info_1_m: '', // 产品内容
   info_2_m: '', // 产品内容
@@ -138,14 +143,14 @@ export default {
   methods: {
     fetchData(id) {
       fetchProduct(id, {
-        append: 'image_group,info_group'
+        append: 'path_group,info_group'
       }).then(response => {
         this.postForm = response.data
         // TODO 暂时想不到更好的方法
         this.postForm.info_0_m = response.data.info_group.info_0_m
         this.postForm.info_1_m = response.data.info_group.info_1_m
         this.postForm.info_2_m = response.data.info_group.info_2_m
-        this.postForm.images = response.data.image_group
+        this.postForm.images = response.data.path_group
         // set tagsview title
         this.setTagsViewTitle()
 
