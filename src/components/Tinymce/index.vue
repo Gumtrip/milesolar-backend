@@ -121,6 +121,7 @@ export default {
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList['zh'],
+        convert_urls: false,
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
@@ -206,7 +207,8 @@ export default {
     async imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.response.path}" >`)
+        const img = v.response.full_path
+        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${img}" >`)
       })
     }
   }
