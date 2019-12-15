@@ -121,7 +121,7 @@ export default {
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList['zh'],
-        convert_urls: false,
+        convert_urls: false, // 不转换地址
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
