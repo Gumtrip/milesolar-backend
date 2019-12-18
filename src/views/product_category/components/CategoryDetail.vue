@@ -16,6 +16,11 @@
                 标题
               </MDinput>
             </el-form-item>
+
+            <el-form-item prop="image">
+              <Upload v-model="postForm.image" :upload-config="uploadConfig" />
+            </el-form-item>
+
             <el-form-item label="所属分类">
               <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
             </el-form-item>
@@ -30,17 +35,20 @@
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import CatTree from '@/components/CatTree' //
+import Upload from '@/components/Upload/SingleImage'
+
 import { fetchProductCategory, createProductCategory, updateProductCategory, fetchProductCategoryTrees } from '@/api/product'
 
 const defaultForm = {
   title: '', // 文章题目
   id: null,
-  parent_id: null
+  parent_id: null,
+  image: '' // 图片
 }
 
 export default {
   name: 'CategoryDetail',
-  components: { CatTree, MDinput, Sticky },
+  components: { CatTree, MDinput, Sticky, Upload },
   props: {
     isEdit: {
       type: Boolean,
@@ -68,8 +76,14 @@ export default {
       rules: {
         title: [{ validator: validateRequire }]
       },
+      uploadConfig: {
+        data: {
+          folder: 'product_category',
+          id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
+        }
+      },
       tempRoute: {},
-      categoryTrees: {}
+      categoryTrees: []
     }
   },
   computed: {
