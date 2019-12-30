@@ -1,0 +1,9 @@
+.picBox{text-align: center;font-size: 0;overflow: hidden;
+  span{content: ''; display: inline-block; width: 0;height: 100%; vertical-align: middle;}
+  div.pic{display: inline-block;vertical-align: middle;}
+  img{max-height: 100%;max-width: 100%}
+}
+.flexPic{display: flex;align-items: center;justify-content: center;
+  img{max-height: 100%;max-width: 100%}
+}
+.nowrap {white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
