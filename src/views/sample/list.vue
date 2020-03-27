@@ -9,7 +9,7 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
@@ -27,9 +27,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
+      <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}">
+          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import { fetchArticleCategories, deleteArticleCategory } from '@/api/article'
+import { fetchSamples, deleteSample } from '@/api/sample'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'ArticleList',
+  name: 'SampleList',
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -80,7 +80,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchArticleCategories(this.listQuery).then(response => {
+      fetchSamples(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.total
         this.listLoading = false
@@ -88,7 +88,7 @@ export default {
     },
     deleteItem(id) {
       this.$confirm('确认删除？').then(() => {
-        deleteArticleCategory(id).then(() => {
+        deleteSample(id).then(() => {
           this.$message({
             message: '删除成功！',
             type: 'success'
@@ -108,7 +108,6 @@ export default {
   .edit-input {
     padding-right: 100px;
   }
-
   .cancel-btn {
     position: absolute;
     right: 15px;

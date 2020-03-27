@@ -76,3 +76,9 @@ export function updateProductCategory(id, data) {
     data: data
   })
 }
+export function deleteProductCategory(id) {
+  return request({
+    url: 'admin/product_categories/' + id,
+    method: 'delete'
+  })
+}

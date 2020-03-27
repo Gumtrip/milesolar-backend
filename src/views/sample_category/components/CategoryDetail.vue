@@ -1,23 +1,20 @@
 <template>
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+        <el-button id="subBtn" v-loading="loading" type="success" @click="submitForm">
           保存
         </el-button>
       </sticky>
 
       <div class="createPost-main-container">
         <el-row>
-
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
                 标题
               </MDinput>
             </el-form-item>
-
           </el-col>
         </el-row>
       </div>
@@ -28,7 +25,7 @@
 <script>
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticleCategory, createArticleCategory, updateArticleCategory } from '@/api/article'
+import { fetchSampleCategory, createSampleCategory, updateSampleCategory } from '@/api/sample'
 
 const defaultForm = {
   title: '', // 文章题目
@@ -36,7 +33,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'ArticleDetail',
+  name: 'SampleDetail',
   components: { MDinput, Sticky },
   props: {
     isEdit: {
@@ -81,7 +78,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticleCategory(id).then(response => {
+      fetchSampleCategory(id).then(response => {
         this.postForm = response.data
         // set tagsview title
         this.setTagsViewTitle()
@@ -93,12 +90,12 @@ export default {
     },
 
     setTagsViewTitle() {
-      const title = '编辑文章'
+      const title = '编辑案例'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑文章'
+      const title = '编辑案例'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -108,9 +105,9 @@ export default {
           let res
           try {
             if (this.isEdit) {
-              res = await updateArticleCategory(this.id, this.postForm)
+              res = await updateSampleCategory(this.id, this.postForm)
             } else {
-              res = await createArticleCategory(this.postForm)
+              res = await createSampleCategory(this.postForm)
             }
 
             if (res.status === 201 || res.status === 200) {
@@ -174,4 +171,5 @@ export default {
       border-bottom: 1px solid #bfcbd9;
     }
   }
+  #subBtn{margin-left: 10px}
 </style>

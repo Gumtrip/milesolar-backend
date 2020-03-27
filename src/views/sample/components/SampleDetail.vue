@@ -20,27 +20,19 @@
           </el-col>
         </el-row>
         <el-form-item prop="category_id">
-          <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
+          <el-select v-model="postForm.category_id" placeholder="案例分类" name="category_id" required>
+            <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
+          </el-select>
         </el-form-item>
-
         <el-form-item>
-          <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="请输入简介" />
+          <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
-        <el-form-item prop="info_0_m" class="article_content">
-          <Tinymce ref="editor" v-model="postForm.info_0_m" :height="400" :upload-config="uploadConfig" />
+        <el-form-item prop="desc" class="sample_content">
+          <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
-
-        <el-form-item class="article_content">
-          <Tinymce ref="editor" v-model="postForm.info_1_m" :height="400" :upload-config="uploadConfig" />
-        </el-form-item>
-
-        <el-form-item class="article_content">
-          <Tinymce ref="editor" v-model="postForm.info_2_m" :height="400" :upload-config="uploadConfig" />
-        </el-form-item>
-
-        <el-form-item prop="images">
-          <Upload ref="uploader" v-model="postForm.images" :upload-config="uploadConfig" />
+        <el-form-item prop="image">
+          <Upload v-model="postForm.image" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="input-text" prop="seo_title">
@@ -63,30 +55,28 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/SingleImage2'
+import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchProduct, createProduct, updateProduct, fetchProductCategoryTrees } from '@/api/product'
+import { fetchSample, createSample, fetchSampleCategories, updateSample } from '@/api/sample'
 import moment from 'moment'
-import CatTree from '@/components/CatTree' //
 
 const defaultForm = {
-  title: '', // 产品题目
-  brief: '',
-  info_0_m: '', // 产品内容
-  info_1_m: '', // 产品内容
-  info_2_m: '', // 产品内容
+  status: '',
+  title: '', // 案例题目
+  intro: '', // 案例内容
+  desc: '', // 案例内容
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',
-  category_id: null, // 产品分类
-  images: [], // 产品图片
+  category_id: '', // 案例内容
+  image: '', // 案例图片
   id: undefined
 }
 
 export default {
-  name: 'ProductDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, CatTree },
+  name: 'SampleDetail',
+  components: { Tinymce, MDinput, Upload, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -108,11 +98,11 @@ export default {
     return {
       id: undefined,
       postForm: Object.assign({}, defaultForm),
-      categories: [],
+      categories: {},
       loading: false,
       uploadConfig: {
         data: {
-          folder: 'product',
+          folder: 'sample',
           id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
@@ -125,32 +115,20 @@ export default {
       tempRoute: {}
     }
   },
-  computed: {
-
-  },
-  watch: {
-
-  },
+  computed: {},
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.id = id
       this.fetchData(id)
     }
-    this.fetchProductCategoryTrees()
+    this.fetchSampleCategories()
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     fetchData(id) {
-      fetchProduct(id, {
-        append: 'path_group,info_group'
-      }).then(response => {
+      fetchSample(id).then(response => {
         this.postForm = response.data
-        // TODO 暂时想不到更好的方法
-        this.postForm.info_0_m = response.data.info_group.info_0_m
-        this.postForm.info_1_m = response.data.info_group.info_1_m
-        this.postForm.info_2_m = response.data.info_group.info_2_m
-        this.postForm.images = response.data.path_group
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -160,17 +138,17 @@ export default {
         console.log(err)
       })
     },
-    async fetchProductCategoryTrees() {
-      const res = await fetchProductCategoryTrees()
-      this.categories = res.data
+    async fetchSampleCategories() {
+      const res = await fetchSampleCategories()
+      this.categories = res.data.data
     },
     setTagsViewTitle() {
-      const title = '编辑产品'
+      const title = '编辑案例'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑产品'
+      const title = '编辑案例'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -180,15 +158,13 @@ export default {
           let res
           try {
             if (this.isEdit) {
-              res = await updateProduct(this.id, this.postForm)
+              res = await updateSample(this.id, this.postForm)
             } else {
-              res = await createProduct(this.postForm)
+              res = await createSample(this.postForm)
             }
+
             if (res.status === 201) {
-              // TODO 不知道为什么这样写的话，你会发现defaultForm 的值已经改变了
-              // this.postForm = defaultForm
-              // this.postForm = {}
-              this.postForm.images.splice(0, this.postForm.images.length)// 不能够这样写 this.postForm.images=[]
+              this.postForm = {}
               this.$refs.editor.setContent('')
               this.$notify({ title: '成功', message: '创建成功', type: 'success' })
             }
@@ -206,6 +182,7 @@ export default {
         }
       })
     }
+
   }
 }
 </script>
@@ -241,11 +218,11 @@ export default {
     }
   }
 
-  .article_content {
+  .sample_content {
     margin-bottom: 30px;
   }
 
-  .article-textarea /deep/ {
+  .sample-textarea /deep/ {
     textarea {
       padding-right: 40px;
       resize: none;

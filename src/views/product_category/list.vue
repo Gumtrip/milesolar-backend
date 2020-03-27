@@ -30,10 +30,9 @@
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
           <router-link :to="{name:'editProductCategories',params:{id:scope.row.id}}">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              修改
-            </el-button>
+            <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
+          <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +47,7 @@
 </template>
 
 <script>
-import { fetchProductCategories } from '@/api/product'
+import { fetchProductCategories, deleteProductCategory } from '@/api/product'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -86,7 +85,22 @@ export default {
         this.total = response.data.meta.total
         this.listLoading = false
       })
+    },
+    deleteItem(id) {
+      this.$confirm('确认删除？').then(() => {
+        deleteProductCategory(id).then(() => {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          this.getList()
+        })
+      })
+        .catch((e) => {
+          console.log(e)
+        })
     }
+
   }
 }
 </script>

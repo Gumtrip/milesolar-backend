@@ -77,3 +77,9 @@ export function updateArticleCategory(id, data) {
     data: data
   })
 }
+export function deleteArticleCategory(id) {
+  return request({
+    url: 'admin/article_categories/' + id,
+    method: 'delete'
+  })
+}

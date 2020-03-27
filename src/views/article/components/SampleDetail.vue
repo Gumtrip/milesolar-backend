@@ -169,7 +169,7 @@ export default {
               this.$notify({ title: '成功', message: '创建成功', type: 'success' })
             }
             if (res.status === 200) {
-              this.updateDate = moment().format('YYYY-DD-MM H:m:s')
+              this.updateDate = moment().format('YYYY-MM-DD H:m:s')
               this.$notify({ title: '成功', message: '修改成功', type: 'success' })
             }
           } catch (e) {
