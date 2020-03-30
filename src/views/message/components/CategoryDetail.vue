@@ -18,11 +18,11 @@
           <el-input v-model="postForm.msg" type="textarea" placeholder="请输入内容" />
         </el-form-item>
 
-        <el-form-item v-if="this.postForm.product_id>0" label="产品信息:">
-          <h3 class="productTitle" v-text="this.postForm.product_info.title" />
+        <el-form-item v-if="postForm.product_id>0" label="产品信息:">
+          <h3 class="productTitle" v-text="postForm.product_info.title" />
           <div class="thumbImage flexPic">
-            <a target="_blank" :href="baseUrl+'/products/'+this.postForm.product_id">
-              <img :src="this.postForm.product_info.main_image" alt="">
+            <a target="_blank" :href="baseUrl+'/products/'+postForm.product_id">
+              <img :src="postForm.product_info.main_image" alt="">
             </a>
           </div>
         </el-form-item>
@@ -31,7 +31,6 @@
     </el-form>
   </div>
 </template>
-
 <script>
 import { fetchMessage } from '@/api/message'
 

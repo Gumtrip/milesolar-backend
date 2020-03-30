@@ -31,6 +31,15 @@
         <el-form-item prop="desc" class="article_content">
           <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
+        <el-form-item>
+          <el-switch
+            v-model="postForm.is_index"
+            active-text="首页显示"
+            inactive-text="不在首页显示"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
         <el-form-item prop="image">
           <Upload v-model="postForm.image" :upload-config="uploadConfig" />
         </el-form-item>
