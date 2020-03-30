@@ -24,6 +24,10 @@
             <el-form-item label="所属分类">
               <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
             </el-form-item>
+
+            <el-form-item>
+              <el-input v-model="postForm.order" placeholder="排序" />
+            </el-form-item>
           </el-col>
         </el-row>
       </div>
