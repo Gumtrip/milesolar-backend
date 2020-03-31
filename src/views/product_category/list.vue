@@ -20,6 +20,11 @@
           <span>{{ (scope.row.depth+1) }}</span>
         </template>
       </el-table-column>
+      <el-table-column width="180px" align="center" label="排序">
+        <template slot-scope="scope">
+          <span>{{ (scope.row.order) }}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column width="180px" align="center" label="创建日期">
         <template slot-scope="scope">
