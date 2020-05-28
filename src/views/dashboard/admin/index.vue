@@ -50,8 +50,8 @@ import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
-// import { fetchVisitorsAndPageViews } from '@/api/google-analytics'
-// import moment from 'moment'
+import { fetchVisitorsAndPageViews } from '@/api/google-analytics'
+import moment from 'moment'
 
 const lineChartData = {
   newVisitis: {
@@ -96,10 +96,14 @@ export default {
       this.lineChartData = lineChartData[type]
     },
     async getVisitorsAndPageViews() {
-      // const format = 'YYYY-MM-DD'
-      // const yesterday = moment().subtract(1, 'days').format(format)
-      // const lastWeek = moment().subtract(7, 'days').format(format)
-      // const res = fetchVisitorsAndPageViews(yesterday,lastWeek)
+      const format = 'YYYY-MM-DD'
+      const yesterday = moment().subtract(1, 'days').format(format)
+      const lastWeek = moment().subtract(7, 'days').format(format)
+      const res = await fetchVisitorsAndPageViews({
+        start: lastWeek,
+        end: yesterday
+      },)
+      console.log(res)
     }
   }
 }
