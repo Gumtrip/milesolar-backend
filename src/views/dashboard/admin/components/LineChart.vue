@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import moment from 'moment'
 
 export default {
   mixins: [resize],
@@ -47,6 +48,8 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initChart()
+      const lastThirtyDays = [...new Array(30)].map((i, idx) => moment().startOf('day').subtract(idx, 'days').format('YYYY-MM-DD'))
+      console.log(lastThirtyDays)
     })
   },
   beforeDestroy() {
@@ -59,6 +62,7 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
+
       this.setOptions(this.chartData)
     },
     setOptions({ expectedData, actualData } = {}) {

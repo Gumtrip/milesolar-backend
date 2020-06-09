@@ -109,7 +109,7 @@ export default {
     }
   },
   created() {
-    if (process.env.VUE_APP_URL.ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       this.loginForm.mobile = '13809811545'
       this.loginForm.password = '123456'
     }
