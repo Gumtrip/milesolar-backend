@@ -33,6 +33,7 @@ export default {
     }
   },
   data() {
+    this.lastThirtyDays = [...new Array(30)].map((i, idx) => moment().startOf('day').subtract(idx, 'days').format('YYYY-MM-DD'))
     return {
       chart: null
     }
@@ -48,8 +49,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initChart()
-      const lastThirtyDays = [...new Array(30)].map((i, idx) => moment().startOf('day').subtract(idx, 'days').format('YYYY-MM-DD'))
-      console.log(lastThirtyDays)
     })
   },
   beforeDestroy() {
@@ -62,13 +61,12 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
       this.setOptions(this.chartData)
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.lastThirtyDays,
           boundaryGap: false,
           axisTick: {
             show: false

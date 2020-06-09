@@ -46,25 +46,28 @@ export default {
   },
   data() {
     // 统计30日内的浏览量
-    this.getTotalVisitorsAndPageViews()
     return {
-      lineChartData: lineChartData.newVisitis
-
+      lineChartData: lineChartData.newVisitis,
+      visitorsData: []
     }
+  },
+  async created() {
+    this.visitorsData = this.getTotalVisitorsAndPageViews()
+    console.log(this.visitorsData)
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     },
-    async getTotalVisitorsAndPageViews() {
+    getTotalVisitorsAndPageViews() {
       const format = 'YYYY-MM-DD'
       const start = moment().subtract(1, 'days').format(format)
       const end = moment().subtract(30, 'days').format(format)
-      const res = await fetchTotalVisitorsAndPageViews({
+      const res = fetchTotalVisitorsAndPageViews({
         start: end,
         end: start
       },)
-      console.log(res)
+      return res.data
     }
   }
 }
