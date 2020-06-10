@@ -20,8 +20,8 @@ import moment from 'moment'
 
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+    visitors: [],
+    pageViews: []
   },
   messages: {
     expectedData: [200, 192, 120, 144, 160, 130, 140],
@@ -52,22 +52,28 @@ export default {
     }
   },
   async created() {
-    this.visitorsData = this.getTotalVisitorsAndPageViews()
-    console.log(this.visitorsData)
+    this.getTotalVisitorsAndPageViews()
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     },
-    getTotalVisitorsAndPageViews() {
+    async getTotalVisitorsAndPageViews() {
       const format = 'YYYY-MM-DD'
-      const start = moment().subtract(1, 'days').format(format)
+      const start = moment().startOf('day').format(format)
       const end = moment().subtract(30, 'days').format(format)
-      const res = fetchTotalVisitorsAndPageViews({
+      const res = await fetchTotalVisitorsAndPageViews({
         start: end,
         end: start
       },)
-      return res.data
+      const visitors = []
+      const pageViews = []
+      for (const item of res.data) {
+        visitors.push(item.visitors)
+        pageViews.push(item.pageViews)
+      }
+      this.lineChartData.visitors = visitors
+      this.lineChartData.pageViews = pageViews
     }
   }
 }

@@ -34,6 +34,7 @@ export default {
   },
   data() {
     this.lastThirtyDays = [...new Array(30)].map((i, idx) => moment().startOf('day').subtract(idx, 'days').format('YYYY-MM-DD'))
+    this.lastThirtyDays.reverse()
     return {
       chart: null
     }
@@ -63,7 +64,7 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ visitors, pageViews } = {}) {
       this.chart.setOption({
         xAxis: {
           data: this.lastThirtyDays,
@@ -92,10 +93,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['visitors', 'pageViews']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: 'visitors', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -106,12 +107,12 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: visitors,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: 'pageViews',
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -126,7 +127,7 @@ export default {
               }
             }
           },
-          data: actualData,
+          data: pageViews,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]
