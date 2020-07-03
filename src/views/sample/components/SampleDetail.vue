@@ -28,7 +28,18 @@
           <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
+        <el-form-item>
+          <el-switch
+            v-model="postForm.is_index"
+            active-text="首页显示"
+            inactive-text="不在首页显示"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+
         <el-form-item prop="desc" class="sample_content">
+          <label>详细内容:</label>
           <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
         <el-form-item prop="image">
@@ -66,6 +77,7 @@ const defaultForm = {
   title: '', // 案例题目
   intro: '', // 案例内容
   desc: '', // 案例内容
+  is_index: 0, // 首页显示
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',

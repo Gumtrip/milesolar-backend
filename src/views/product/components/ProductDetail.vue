@@ -27,15 +27,28 @@
           <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
+        <el-form-item>
+          <el-switch
+            v-model="postForm.is_index"
+            active-text="首页显示"
+            inactive-text="不在首页显示"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+
         <el-form-item prop="info_0_m" class="article_content">
+          <label>Feature:</label>
           <Tinymce ref="editor" v-model="postForm.info_0_m" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="article_content">
+          <label>Specification:</label>
           <Tinymce ref="editor" v-model="postForm.info_1_m" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
 
         <el-form-item class="article_content">
+          <label>Application:</label>
           <Tinymce ref="editor" v-model="postForm.info_2_m" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
 
@@ -78,6 +91,7 @@ const defaultForm = {
   info_2_m: '', // 产品内容
   seo_title: '',
   seo_keywords: '',
+  is_index: 0, // 首页显示
   seo_desc: '',
   category_id: null, // 产品分类
   images: [], // 产品图片

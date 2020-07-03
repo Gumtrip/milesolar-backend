@@ -29,6 +29,7 @@
         </el-form-item>
 
         <el-form-item prop="desc" class="article_content">
+          <label>详细内容</label>
           <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
         <el-form-item>
@@ -75,6 +76,7 @@ const defaultForm = {
   title: '', // 文章题目
   intro: '', // 文章内容
   desc: '', // 文章内容
+  is_index: 0, // 首页显示
   seo_title: '',
   seo_keywords: '',
   seo_desc: '',
