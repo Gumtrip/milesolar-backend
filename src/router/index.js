@@ -229,6 +229,68 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/setting',
+    component: Layout,
+    redirect: '/setting/list',
+    name: 'setting',
+    meta: {
+      title: '配置',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/setting/create'),
+        name: 'CreateSetting',
+        meta: { title: '新增配置', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/setting/edit'),
+        name: 'EditSetting',
+        meta: { title: '编辑配置', noCache: true, activeMenu: '/setting/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/setting/list'),
+        name: 'SettingList',
+        meta: { title: '配置列表', icon: 'list' }
+      }
+    ]
+  },
+  {
+    path: '/setting_categories',
+    component: Layout,
+    redirect: '/setting_categories/list',
+    name: 'setting_categories',
+    meta: {
+      title: '配置分类',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/setting_category/create'),
+        name: 'createSettingCategory',
+        meta: { title: '新增配置分类', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/setting_category/edit'),
+        name: 'editSettingCategories',
+        meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/setting_category/list'),
+        name: 'settingCategoriesList',
+        meta: { title: '配置分类列表', icon: 'list' }
+      }
+    ]
+  },
+  {
     path: '/product',
     component: Layout,
     redirect: '/product/list',
