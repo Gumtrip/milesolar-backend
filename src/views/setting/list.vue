@@ -9,7 +9,7 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'EditSetting',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
@@ -17,7 +17,7 @@
 
       <el-table-column width="180px" align="center" label="分类">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at }}</span>
+          <span v-if="scope.row.category">{{ scope.row.category.title }}</span>
         </template>
       </el-table-column>
 
@@ -29,7 +29,7 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}">
+          <router-link :to="{name:'EditSetting',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import { fetchSamples, deleteSample } from '@/api/sample'
+import { fetchSettings, deleteSetting } from '@/api/setting'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'SampleList',
+  name: 'SettingList',
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -69,6 +69,7 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        include: 'category',
         page: 1,
         page_size: 20
       }
@@ -78,17 +79,16 @@ export default {
     this.getList()
   },
   methods: {
-    getList() {
+    async getList() {
       this.listLoading = true
-      fetchSamples(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.meta.total
-        this.listLoading = false
-      })
+      const response = await fetchSettings(this.listQuery)
+      this.list = response.data.data
+      this.total = response.data.meta.total
+      this.listLoading = false
     },
     deleteItem(id) {
       this.$confirm('确认删除？').then(() => {
-        deleteSample(id).then(() => {
+        deleteSetting(id).then(() => {
           this.$message({
             message: '删除成功！',
             type: 'success'

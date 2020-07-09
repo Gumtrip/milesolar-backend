@@ -20,13 +20,13 @@
           </el-col>
         </el-row>
         <el-form-item prop="category_id">
-          <el-select v-model="postForm.category_id" placeholder="案例分类" name="category_id" required>
+          <el-select v-model="postForm.category_id" placeholder="配置分类" name="category_id" required>
             <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
           </el-select>
         </el-form-item>
 
         <el-form-item prop="type">
-          <el-select v-model="postForm.type" placeholder="案例分类" name="type" required>
+          <el-select v-model="postForm.type" placeholder="配置分类" name="type" required>
             <el-option v-for="(type,key) in typeMap" :key="key" :label="type.title" :value="type.value" />
           </el-select>
         </el-form-item>
@@ -139,12 +139,12 @@ export default {
       this.categories = res.data.data
     },
     setTagsViewTitle() {
-      const title = '编辑案例'
+      const title = '编辑配置'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑案例'
+      const title = '编辑配置'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
