@@ -103,6 +103,37 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   /** when your routing map is too long, you can split it into small modules **/
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/list',
+    name: 'order',
+    meta: {
+      title: '订单',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/order/create'),
+        name: 'CreateOrder',
+        meta: { title: '新增订单', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/order/edit'),
+        name: 'EditOrder',
+        meta: { title: '编辑订单', noCache: true, activeMenu: '/order/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/order/list'),
+        name: 'OrderList',
+        meta: { title: '订单列表', icon: 'list' }
+      }
+    ]
+  },
 
   {
     path: '/article',
