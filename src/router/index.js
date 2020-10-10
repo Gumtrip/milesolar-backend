@@ -149,7 +149,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/article/create'),
         name: 'CreateArticle',
-        meta: { title: '新增文章', icon: 'edit' }
+        meta: { title: '新增文章', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -180,7 +181,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/article_category/create'),
         name: 'createArticleCategory',
-        meta: { title: '新增文章分类', icon: 'edit' }
+        meta: { title: '新增文章分类', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -211,7 +213,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/sample/create'),
         name: 'CreateSample',
-        meta: { title: '新增案例', icon: 'edit' }
+        meta: { title: '新增案例', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -242,7 +245,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/sample_category/create'),
         name: 'createSampleCategory',
-        meta: { title: '新增案例分类', icon: 'edit' }
+        meta: { title: '新增案例分类', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -273,7 +277,9 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/setting/create'),
         name: 'CreateSetting',
-        meta: { title: '新增配置', icon: 'edit' }
+        meta: { title: '新增配置', icon: 'edit' },
+        hidden: true
+
       },
       {
         path: 'edit/:id(\\d+)',
@@ -304,7 +310,9 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/setting_category/create'),
         name: 'createSettingCategory',
-        meta: { title: '新增配置分类', icon: 'edit' }
+        meta: { title: '新增配置分类', icon: 'edit' },
+        hidden: true
+
       },
       {
         path: 'edit/:id(\\d+)',
@@ -335,7 +343,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/product/create'),
         name: 'CreateProduct',
-        meta: { title: '新建产品', icon: 'edit' }
+        meta: { title: '新建产品', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -366,7 +375,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/product_category/create'),
         name: 'createProductCategory',
-        meta: { title: '新增产品分类', icon: 'edit' }
+        meta: { title: '新增产品分类', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',

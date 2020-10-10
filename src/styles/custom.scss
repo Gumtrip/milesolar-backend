@@ -7,3 +7,11 @@
   img{max-height: 100%;max-width: 100%}
 }
 .nowrap {white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.listFunBox{background: #fff;display: flex;justify-content: space-between;padding-right: 20px;align-items: center;
+  form{display: flex;align-items: center;height: 60px;}
+  .el-form-item{margin-bottom: 0}
+  .el-form-item label{font-size: 16px;font-weight: bold}
+  input[type=text]{width: 248px;border-radius:  4px 0 0 4px ;}
+  .searchBtn{cursor: pointer;border-radius:0  4px 4px 0 ;width: 32px;height: 32px;box-sizing: content-box;display: inline-block;border: 1px solid #dcdfe6;border-left: none}
+}

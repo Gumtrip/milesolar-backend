@@ -1,5 +1,17 @@
 <template>
   <div class="app-container">
+    <div class="listFunBox">
+      <el-form ref="form" :model="listQuery" label-width="100px">
+        <el-form-item label="分类列表">
+          <el-input v-model="listQuery.title" placeholder="搜索分类" />
+        </el-form-item>
+        <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
+      </el-form>
+      <router-link :to="{name:'createArticleCategory'}">
+        <el-button type="primary">添加分类</el-button>
+      </router-link>
+    </div>
+
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
@@ -69,6 +81,7 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        title: '',
         page: 1,
         page_size: 20
       }
@@ -105,13 +118,5 @@ export default {
 </script>
 
 <style scoped>
-  .edit-input {
-    padding-right: 100px;
-  }
 
-  .cancel-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-  }
 </style>
