@@ -117,7 +117,8 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/order/create'),
         name: 'CreateOrder',
-        meta: { title: '新增订单', icon: 'edit' }
+        meta: { title: '新增订单', icon: 'edit' },
+        hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
@@ -317,8 +318,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/setting_category/edit'),
-        name: 'editSettingCategories',
-        meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
+        name: 'editSettingCategories', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
         hidden: true
       },
       {

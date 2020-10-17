@@ -16,11 +16,12 @@
                 标题
               </MDinput>
             </el-form-item>
-
+            <el-form-item class="input-text" label="简介：" prop="brief">
+              <el-input v-model="postForm.brief" type="textarea" :rows="5" />
+            </el-form-item>
             <el-form-item prop="image">
               <Upload v-model="postForm.image" :upload-config="uploadConfig" />
             </el-form-item>
-
             <el-form-item label="所属分类">
               <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
             </el-form-item>
