@@ -68,7 +68,7 @@ import { fetchProductCategories, deleteProductCategory } from '@/api/product'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'ArticleList',
+  name: 'ProductList',
   components: { Pagination },
   filters: {
     statusFilter(status) {

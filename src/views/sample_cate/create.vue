@@ -6,7 +6,7 @@
 import detail from './components/detail'
 
 export default {
-  name: 'SettingCategoryCreate',
+  name: 'SampleCateCreate',
   components: { detail }
 }
 </script>

@@ -6,7 +6,7 @@
 import CategoryDetail from './components/CategoryDetail'
 
 export default {
-  name: 'EditForm',
+  name: 'ProductEdit',
   components: { CategoryDetail }
 }
 </script>

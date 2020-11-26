@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'createArticleCategory'}">
+      <router-link :to="{name:'SettingCategoryCreate'}">
         <el-button type="primary">添加分类</el-button>
       </router-link>
     </div>
@@ -21,7 +21,7 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'ArticleCategoryEdit',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'SettingCateEdit',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
@@ -41,7 +41,7 @@
 
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
-          <router-link :to="{name:'ArticleCategoryEdit',params:{id:scope.row.id}}">
+          <router-link :to="{name:'SettingCateEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
@@ -59,11 +59,11 @@
 </template>
 
 <script>
-import { fetchArticleCategories, deleteArticleCategory } from '@/api/article'
+import { fetchSettingCategories, deleteSettingCategory } from '@/api/setting'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'ArticleCategoryList',
+  name: 'SettingCateList',
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -93,7 +93,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchArticleCategories(this.listQuery).then(response => {
+      fetchSettingCategories(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.total
         this.listLoading = false
@@ -101,7 +101,7 @@ export default {
     },
     deleteItem(id) {
       this.$confirm('确认删除？').then(() => {
-        deleteArticleCategory(id).then(() => {
+        deleteSettingCategory(id).then(() => {
           this.$message({
             message: '删除成功！',
             type: 'success'
@@ -113,10 +113,19 @@ export default {
           console.log(e)
         })
     }
+
   }
 }
 </script>
 
 <style scoped>
+  .edit-input {
+    padding-right: 100px;
+  }
 
+  .cancel-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
 </style>

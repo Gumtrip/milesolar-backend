@@ -155,8 +155,8 @@ export const asyncRoutes = [
       },
       {
         path: 'cate/list',
-        component: () => import('@/views/article_category/list'),
-        name: 'ArticleCategoryList',
+        component: () => import('@/views/article_cate/list'),
+        name: 'ArticleCateList',
         meta: { title: '文章列表分类', icon: 'list' }
       },
       {
@@ -177,14 +177,14 @@ export const asyncRoutes = [
       {
         path: 'cate/create',
         component: () => import('@/views/article_category/create'),
-        name: 'ArticleCategoryCreate',
+        name: 'ArticleCateCreate',
         meta: { title: '新增文章分类', icon: 'edit', noCache: true },
         hidden: true
       },
       {
         path: 'cate/edit/:id(\\d+)',
         component: () => import('@/views/article_category/edit'),
-        name: 'ArticleCategoryEdit',
+        name: 'ArticleCateEdit',
         meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article_category/list' },
         hidden: true
       }
@@ -209,8 +209,8 @@ export const asyncRoutes = [
       {
         path: '/cate/list',
         component: Layout,
-        redirect: '/sample_categories/list',
-        name: 'SampleCategory',
+        redirect: '/sample_cate/list',
+        name: 'SampleCate',
         meta: {
           title: '案例分类列表',
           icon: 'example'
@@ -279,22 +279,22 @@ export const asyncRoutes = [
       },
       {
         path: 'create',
-        component: () => import('@/views/setting_category/create'),
-        name: 'SettingCategoryCreate',
+        component: () => import('@/views/setting_cate/create'),
+        name: 'SettingCateCreate',
         meta: { title: '新增配置分类', icon: 'edit' },
         hidden: true
 
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/setting_category/edit'),
-        name: 'SettingCategoryEdit', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
+        component: () => import('@/views/setting_cate/edit'),
+        name: 'SettingCateEdit', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
         hidden: true
       },
       {
         path: 'list',
-        component: () => import('@/views/setting_category/list'),
-        name: 'SettingCategoryList',
+        component: () => import('@/views/setting_cate/list'),
+        name: 'SettingCateList',
         meta: { title: '配置分类列表', icon: 'list' }
       }
     ]

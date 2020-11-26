@@ -1,12 +1,12 @@
 <template>
-  <detail :is-edit="false" />
+  <detail :is-edit="true" />
 </template>
 
 <script>
 import detail from './components/detail'
 
 export default {
-  name: 'SampleCategoryCreate',
+  name: 'SettingCateEdit',
   components: { detail }
 }
 </script>

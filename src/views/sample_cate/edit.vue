@@ -6,7 +6,7 @@
 import detail from './components/detail'
 
 export default {
-  name: 'SampleCategoryEdit',
+  name: 'SampleCateEdit',
   components: { detail }
 }
 </script>
