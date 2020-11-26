@@ -9,7 +9,7 @@
 
       <el-table-column min-width="300px" label="名字">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditMessage',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'MessageEdit',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.name }}</span>
           </router-link>
         </template>

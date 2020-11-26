@@ -40,7 +40,7 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditProduct',params:{id:scope.row.id}}">
+          <router-link :to="{name:'ProductEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <a target="_blank" :href="baseUrl+'/products/'+scope.row.id">

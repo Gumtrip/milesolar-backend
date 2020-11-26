@@ -233,14 +233,14 @@ export const asyncRoutes = [
       {
         path: '/cate/create',
         component: () => import('@/views/sample/create'),
-        name: 'SampleCreate',
+        name: 'SampleCateCreate',
         meta: { title: '新增案例分类', icon: 'edit', noCache: true },
         hidden: true
       },
       {
         path: '/cate/edit/:id(\\d+)',
         component: () => import('@/views/sample/edit'),
-        name: 'SampleEdit',
+        name: 'SampleCateEdit',
         meta: { title: '编辑案例分类', noCache: true, activeMenu: '/sample/list' },
         hidden: true
       }
