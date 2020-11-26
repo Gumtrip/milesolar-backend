@@ -1,13 +1,13 @@
 <template>
-  <category-detail :is-edit="false" />
+  <detail :is-edit="false" />
 </template>
 
 <script>
-import CategoryDetail from './components/CategoryDetail'
+import detail from './components/detail'
 
 export default {
-  name: 'CreateForm',
-  components: { CategoryDetail }
+  name: 'SettingCategoryCreate',
+  components: { detail }
 }
 </script>
 

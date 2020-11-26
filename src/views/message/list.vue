@@ -57,7 +57,7 @@ import { fetchMessages } from '@/api/message'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'ArticleList',
+  name: 'MessageList',
   components: { Pagination },
   filters: {
     statusFilter(status) {

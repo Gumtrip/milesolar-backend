@@ -63,7 +63,7 @@ import { fetchSettingCategories, deleteSettingCategory } from '@/api/setting'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'SettingList',
+  name: 'SettingCategoryList',
   components: { Pagination },
   filters: {
     statusFilter(status) {

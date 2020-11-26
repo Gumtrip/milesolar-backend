@@ -63,7 +63,7 @@ import { fetchSampleCategories, deleteSampleCategory } from '@/api/sample'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'SampleList',
+  name: 'SampleCategoryList',
   components: { Pagination },
   filters: {
     statusFilter(status) {

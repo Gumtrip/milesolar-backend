@@ -1,13 +1,13 @@
 <template>
-  <setting-detail :is-edit="false" />
+  <detail :is-edit="false" />
 </template>
 
 <script>
-import SettingDetail from './components/SettingDetail'
+import Detail from './components/detail'
 
 export default {
-  name: 'CreateForm',
-  components: { SettingDetail }
+  name: 'SettingCreate',
+  components: { Detail }
 }
 </script>
 

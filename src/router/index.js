@@ -110,7 +110,8 @@ export const asyncRoutes = [
     name: 'order',
     meta: {
       title: '订单',
-      icon: 'example'
+      icon: 'example',
+      hidden: true
     },
     children: [
       {
@@ -140,63 +141,52 @@ export const asyncRoutes = [
     path: '/article',
     component: Layout,
     redirect: '/article/list',
-    name: 'article',
+    name: 'Article',
     meta: {
       title: '文章',
       icon: 'example'
     },
     children: [
       {
+        path: 'list',
+        component: () => import('@/views/article/list'),
+        name: 'ArticleList',
+        meta: { title: '文章列表', icon: 'list' }
+      },
+      {
+        path: 'cate/list',
+        component: () => import('@/views/article_category/list'),
+        name: 'ArticleCategoryList',
+        meta: { title: '文章列表分类', icon: 'list' }
+      },
+      {
         path: 'create',
         component: () => import('@/views/article/create'),
-        name: 'CreateArticle',
-        meta: { title: '新增文章', icon: 'edit' },
+        name: 'ArticleCreate',
+        meta: { title: '新增文章', icon: 'edit', noCache: true },
         hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/article/edit'),
-        name: 'EditArticle',
+        name: 'ArticleEdit',
         meta: { title: '编辑文章', noCache: true, activeMenu: '/article/list' },
         hidden: true
       },
+
       {
-        path: 'list',
-        component: () => import('@/views/article/list'),
-        name: 'ArticleList',
-        meta: { title: '文章列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/article_categories',
-    component: Layout,
-    redirect: '/article_categories/list',
-    name: 'article_categories',
-    meta: {
-      title: '文章分类',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
+        path: 'cate/create',
         component: () => import('@/views/article_category/create'),
-        name: 'createArticleCategory',
-        meta: { title: '新增文章分类', icon: 'edit' },
+        name: 'ArticleCategoryCreate',
+        meta: { title: '新增文章分类', icon: 'edit', noCache: true },
         hidden: true
       },
       {
-        path: 'edit/:id(\\d+)',
+        path: 'cate/edit/:id(\\d+)',
         component: () => import('@/views/article_category/edit'),
-        name: 'editArticleCategories',
+        name: 'ArticleCategoryEdit',
         meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article_category/list' },
         hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/article_category/list'),
-        name: 'articleCategoriesList',
-        meta: { title: '文章列表分类', icon: 'list' }
       }
     ]
   },
@@ -204,63 +194,55 @@ export const asyncRoutes = [
     path: '/sample',
     component: Layout,
     redirect: '/sample/list',
-    name: 'sample',
+    name: 'Sample',
     meta: {
       title: '案例',
       icon: 'example'
     },
     children: [
       {
+        path: 'list',
+        component: () => import('@/views/sample/list'),
+        name: 'SampleList',
+        meta: { title: '案例列表', icon: 'list' }
+      },
+      {
+        path: '/cate/list',
+        component: Layout,
+        redirect: '/sample_categories/list',
+        name: 'SampleCategory',
+        meta: {
+          title: '案例分类列表',
+          icon: 'example'
+        }
+      },
+      {
         path: 'create',
         component: () => import('@/views/sample/create'),
-        name: 'CreateSample',
-        meta: { title: '新增案例', icon: 'edit' },
+        name: 'SampleCreate',
+        meta: { title: '新增案例', icon: 'edit', noCache: true },
         hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/sample/edit'),
-        name: 'EditSample',
+        name: 'SampleEdit',
         meta: { title: '编辑案例', noCache: true, activeMenu: '/sample/list' },
         hidden: true
       },
       {
-        path: 'list',
-        component: () => import('@/views/sample/list'),
-        name: 'SampleList',
-        meta: { title: '案例列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/sample_categories',
-    component: Layout,
-    redirect: '/sample_categories/list',
-    name: 'sample_categories',
-    meta: {
-      title: '案例分类',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/sample_category/create'),
-        name: 'createSampleCategory',
-        meta: { title: '新增案例分类', icon: 'edit' },
+        path: '/cate/create',
+        component: () => import('@/views/sample/create'),
+        name: 'SampleCreate',
+        meta: { title: '新增案例分类', icon: 'edit', noCache: true },
         hidden: true
       },
       {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/sample_category/edit'),
-        name: 'editSampleCategories',
-        meta: { title: '编辑案例分类', noCache: true, activeMenu: '/sample_categories/list' },
+        path: '/cate/edit/:id(\\d+)',
+        component: () => import('@/views/sample/edit'),
+        name: 'SampleEdit',
+        meta: { title: '编辑案例分类', noCache: true, activeMenu: '/sample/list' },
         hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/sample_category/list'),
-        name: 'sampleCategoriesList',
-        meta: { title: '案例列表分类', icon: 'list' }
       }
     ]
   },
@@ -268,7 +250,7 @@ export const asyncRoutes = [
     path: '/setting',
     component: Layout,
     redirect: '/setting/list',
-    name: 'setting',
+    name: 'Setting',
     meta: {
       title: '配置',
       icon: 'example'
@@ -277,7 +259,7 @@ export const asyncRoutes = [
       {
         path: 'create',
         component: () => import('@/views/setting/create'),
-        name: 'CreateSetting',
+        name: 'SettingCreate',
         meta: { title: '新增配置', icon: 'edit' },
         hidden: true
 
@@ -285,7 +267,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/setting/edit'),
-        name: 'EditSetting',
+        name: 'SettingEdit',
         meta: { title: '编辑配置', noCache: true, activeMenu: '/setting/list' },
         hidden: true
       },
@@ -294,23 +276,11 @@ export const asyncRoutes = [
         component: () => import('@/views/setting/list'),
         name: 'SettingList',
         meta: { title: '配置列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/setting_categories',
-    component: Layout,
-    redirect: '/setting_categories/list',
-    name: 'setting_categories',
-    meta: {
-      title: '配置分类',
-      icon: 'example'
-    },
-    children: [
+      },
       {
         path: 'create',
         component: () => import('@/views/setting_category/create'),
-        name: 'createSettingCategory',
+        name: 'SettingCategoryCreate',
         meta: { title: '新增配置分类', icon: 'edit' },
         hidden: true
 
@@ -318,13 +288,13 @@ export const asyncRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/setting_category/edit'),
-        name: 'editSettingCategories', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
+        name: 'SettingCategoryEdit', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/setting_category/list'),
-        name: 'settingCategoriesList',
+        name: 'SettingCategoryList',
         meta: { title: '配置分类列表', icon: 'list' }
       }
     ]
@@ -342,14 +312,14 @@ export const asyncRoutes = [
       {
         path: 'create',
         component: () => import('@/views/product/create'),
-        name: 'CreateProduct',
+        name: 'ProductCreate',
         meta: { title: '新建产品', icon: 'edit' },
         hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/product/edit'),
-        name: 'EditProduct',
+        name: 'ProductEdit',
         meta: { title: '编辑产品', noCache: true, activeMenu: '/product/list' },
         hidden: true
       },
@@ -358,37 +328,25 @@ export const asyncRoutes = [
         component: () => import('@/views/product/list'),
         name: 'ProductList',
         meta: { title: '产品列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/product_categories',
-    component: Layout,
-    redirect: '/product_categories/list',
-    name: 'product_categories',
-    meta: {
-      title: '产品分类',
-      icon: 'example'
-    },
-    children: [
+      },
       {
         path: 'create',
         component: () => import('@/views/product_category/create'),
-        name: 'createProductCategory',
+        name: 'ProductCategoryCreate',
         meta: { title: '新增产品分类', icon: 'edit' },
         hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/product_category/edit'),
-        name: 'editProductCategories',
+        name: 'ProductCategoryEdit',
         meta: { title: '编辑产品分类', noCache: true, activeMenu: '/product_category/list' },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/product_category/list'),
-        name: 'productCategoriesList',
+        name: 'ProductCategoriesList',
         meta: { title: '产品分类列表', icon: 'list' }
       }
     ]
@@ -397,7 +355,7 @@ export const asyncRoutes = [
     path: '/messages',
     component: Layout,
     redirect: '/messages/list',
-    name: 'messages',
+    name: 'Message',
     meta: {
       title: '消息',
       icon: 'example'
@@ -406,7 +364,7 @@ export const asyncRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/message/edit'),
-        name: 'EditMessage',
+        name: 'MessageEdit',
         meta: { title: '消息详情', noCache: true, activeMenu: '/messages/list' },
         hidden: true
       },

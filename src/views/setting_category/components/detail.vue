@@ -15,6 +15,9 @@
                 标题
               </MDinput>
             </el-form-item>
+            <el-form-item label="排序">
+              <el-input v-model="postForm.order" placeholder="排序" />
+            </el-form-item>
           </el-col>
         </el-row>
       </div>
@@ -25,7 +28,7 @@
 <script>
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchSampleCategory, createSampleCategory, updateSampleCategory } from '@/api/sample'
+import { fetchSettingCategory, createSettingCategory, updateSettingCategory } from '@/api/setting'
 
 const defaultForm = {
   title: '', // 文章题目
@@ -33,7 +36,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'SampleDetail',
+  name: 'Detail',
   components: { MDinput, Sticky },
   props: {
     isEdit: {
@@ -78,7 +81,7 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchSampleCategory(id).then(response => {
+      fetchSettingCategory(id).then(response => {
         this.postForm = response.data
         // set tagsview title
         this.setTagsViewTitle()
@@ -90,12 +93,12 @@ export default {
     },
 
     setTagsViewTitle() {
-      const title = '编辑案例'
+      const title = '编辑配置分类'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑案例'
+      const title = '编辑配置分类'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -105,9 +108,9 @@ export default {
           let res
           try {
             if (this.isEdit) {
-              res = await updateSampleCategory(this.id, this.postForm)
+              res = await updateSettingCategory(this.id, this.postForm)
             } else {
-              res = await createSampleCategory(this.postForm)
+              res = await createSettingCategory(this.postForm)
             }
 
             if (res.status === 201 || res.status === 200) {

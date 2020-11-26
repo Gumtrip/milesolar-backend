@@ -1,38 +1,31 @@
 <template>
   <div class="createPost-container">
-    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" label-width="80px">
+    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
+      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+        <el-button id="subBtn" v-loading="loading" type="success" @click="submitForm">
+          保存
+        </el-button>
+      </sticky>
+
       <div class="createPost-main-container">
-        <el-form-item label="名称:">
-          <el-input v-model="postForm.name" />
-        </el-form-item>
-        <el-form-item label="邮件:">
-          <el-input v-model="postForm.email" />
-        </el-form-item>
-        <el-form-item label="IP:">
-          <el-input v-model="postForm.ip" />
-        </el-form-item>
-        <el-form-item label="SKYPE:">
-          <el-input v-model="postForm.skype" />
-        </el-form-item>
-        <el-form-item label="信息:">
-          <el-input v-model="postForm.msg" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-
-        <el-form-item v-if="postForm.product_id>0" label="产品信息:">
-          <h3 class="productTitle" v-text="postForm.product_info.title" />
-          <div class="thumbImage flexPic">
-            <a target="_blank" :href="baseUrl+'/products/'+postForm.product_id">
-              <img :src="postForm.product_info.main_image" alt="">
-            </a>
-          </div>
-        </el-form-item>
-
+        <el-row>
+          <el-col :span="24">
+            <el-form-item prop="title">
+              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
+                标题
+              </MDinput>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </div>
     </el-form>
   </div>
 </template>
+
 <script>
-import { fetchMessage } from '@/api/message'
+import MDinput from '@/components/MDinput'
+import Sticky from '@/components/Sticky' // 粘性header组件
+import { fetchSampleCategory, createSampleCategory, updateSampleCategory } from '@/api/sample'
 
 const defaultForm = {
   title: '', // 文章题目
@@ -40,8 +33,8 @@ const defaultForm = {
 }
 
 export default {
-  name: 'ArticleDetail',
-  components: {},
+  name: 'Detail',
+  components: { MDinput, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -61,17 +54,10 @@ export default {
       }
     }
     return {
-      baseUrl: process.env.VUE_APP_URL,
       id: undefined,
       postForm: Object.assign({}, defaultForm),
       categories: {},
       loading: false,
-      uploadConfig: {
-        data: {
-          model: 'article'
-        },
-        uploadUrl: 'http://top-top.com/api/admin/images'
-      },
       userListOptions: [],
       rules: {
         title: [{ validator: validateRequire }]
@@ -92,9 +78,8 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchMessage(id).then(response => {
+      fetchSampleCategory(id).then(response => {
         this.postForm = response.data
-        console.log(this.postForm.product_info)
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -105,22 +90,53 @@ export default {
     },
 
     setTagsViewTitle() {
-      const title = '编辑消息'
+      const title = '编辑案例'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑消息'
+      const title = '编辑案例'
       document.title = `${title} - ${this.postForm.id}`
+    },
+    submitForm() {
+      this.$refs.postForm.validate(async valid => {
+        if (valid) {
+          this.loading = true
+          let res
+          try {
+            if (this.isEdit) {
+              res = await updateSampleCategory(this.id, this.postForm)
+            } else {
+              res = await createSampleCategory(this.postForm)
+            }
+
+            if (res.status === 201 || res.status === 200) {
+              this.$notify({
+                title: '成功',
+                message: '提交成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.postForm.status = 'published'
+            }
+          } catch (e) {
+            console.log(e)
+          }
+          this.loading = false
+        } else {
+          console.log('error submit!!')
+          this.loading = false
+        }
+      })
     }
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
-  .productTitle{margin: 0}
-  .thumbImage{width: 150px;height: 150px}
+
   .createPost-container {
     position: relative;
 
@@ -155,4 +171,5 @@ export default {
       border-bottom: 1px solid #bfcbd9;
     }
   }
+  #subBtn{margin-left: 10px}
 </style>

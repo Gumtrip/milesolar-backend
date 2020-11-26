@@ -20,28 +20,43 @@
           </el-col>
         </el-row>
         <el-form-item prop="category_id">
-          <el-select v-model="postForm.category_id" placeholder="配置分类" name="category_id" required>
+          <el-select v-model="postForm.category_id" placeholder="案例分类" name="category_id" required>
             <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
           </el-select>
         </el-form-item>
-
-        <el-form-item prop="type">
-          <el-select v-model="postForm.type" placeholder="配置分类" name="type" required>
-            <el-option v-for="(type,key) in typeMap" :key="key" :label="type.title" :value="type.value" />
-          </el-select>
+        <el-form-item>
+          <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
-        <el-form-item v-if="postForm.type === 1">
-          <el-input v-model="postForm.value" type="textarea" :rows="2" placeholder="请输入配置内容" />
+        <el-form-item>
+          <el-switch
+            v-model="postForm.is_index"
+            active-text="首页显示"
+            inactive-text="不在首页显示"
+            :active-value="1"
+            :inactive-value="0"
+          />
         </el-form-item>
 
-        <el-form-item v-if="postForm.type === 2" prop="image">
-          <Upload v-model="postForm.value" :upload-config="uploadConfig" />
-        </el-form-item>
-
-        <el-form-item v-if="postForm.type === 3" prop="desc" class="setting_content">
+        <el-form-item prop="desc" class="sample_content">
           <label>详细内容:</label>
-          <Tinymce ref="editor" v-model="postForm.value" :height="400" :upload-config="uploadConfig" />
+          <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
+        </el-form-item>
+        <el-form-item prop="image">
+          <Upload v-model="postForm.image" :upload-config="uploadConfig" />
+        </el-form-item>
+
+        <el-form-item class="input-text" prop="seo_title">
+          <MDinput v-model="postForm.seo_title" :maxlength="100" name="seo_title">
+            seo标题
+          </MDinput>
+        </el-form-item>
+
+        <el-form-item>
+          <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" />
         </el-form-item>
 
       </div>
@@ -54,19 +69,25 @@ import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchSetting, createSetting, fetchSettingCategories, updateSetting } from '@/api/setting'
+import { fetchSample, createSample, fetchSampleCategories, updateSample } from '@/api/sample'
 import moment from 'moment'
 
 const defaultForm = {
-  title: '', //
-  value: '', //
-  type: 1, //
-  category_id: '', //
+  status: '',
+  title: '', // 案例题目
+  intro: '', // 案例内容
+  desc: '', // 案例内容
+  is_index: 0, // 首页显示
+  seo_title: '',
+  seo_keywords: '',
+  seo_desc: '',
+  category_id: '', // 案例内容
+  image: '', // 案例图片
   id: undefined
 }
 
 export default {
-  name: 'SettingDetail',
+  name: 'Detail',
   components: { Tinymce, MDinput, Upload, Sticky },
   props: {
     isEdit: {
@@ -93,7 +114,7 @@ export default {
       loading: false,
       uploadConfig: {
         data: {
-          folder: 'setting',
+          folder: 'sample',
           id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
@@ -103,12 +124,7 @@ export default {
         category_id: [{ validator: validateRequire }],
         desc: [{ validator: validateRequire }]
       },
-      tempRoute: {},
-      typeMap: [
-        { title: '文本', value: 1 },
-        { title: '图片', value: 2 },
-        { title: '富文本', value: 3 }
-      ]
+      tempRoute: {}
     }
   },
   computed: {},
@@ -118,12 +134,12 @@ export default {
       this.id = id
       this.fetchData(id)
     }
-    this.fetchSettingCategories()
+    this.fetchSampleCategories()
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     fetchData(id) {
-      fetchSetting(id).then(response => {
+      fetchSample(id).then(response => {
         this.postForm = response.data
         // set tagsview title
         this.setTagsViewTitle()
@@ -134,17 +150,17 @@ export default {
         console.log(err)
       })
     },
-    async fetchSettingCategories() {
-      const res = await fetchSettingCategories()
+    async fetchSampleCategories() {
+      const res = await fetchSampleCategories()
       this.categories = res.data.data
     },
     setTagsViewTitle() {
-      const title = '编辑配置'
+      const title = '编辑案例'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = '编辑配置'
+      const title = '编辑案例'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
@@ -154,9 +170,9 @@ export default {
           let res
           try {
             if (this.isEdit) {
-              res = await updateSetting(this.id, this.postForm)
+              res = await updateSample(this.id, this.postForm)
             } else {
-              res = await createSetting(this.postForm)
+              res = await createSample(this.postForm)
             }
 
             if (res.status === 201) {
@@ -214,11 +230,11 @@ export default {
     }
   }
 
-  .setting_content {
+  .sample_content {
     margin-bottom: 30px;
   }
 
-  .setting-textarea /deep/ {
+  .sample-textarea /deep/ {
     textarea {
       padding-right: 40px;
       resize: none;

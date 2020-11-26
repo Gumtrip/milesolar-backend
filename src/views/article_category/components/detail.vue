@@ -36,7 +36,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'ArticleDetail',
+  name: 'Detail',
   components: { MDinput, Sticky },
   props: {
     isEdit: {
