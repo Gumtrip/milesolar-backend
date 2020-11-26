@@ -20,7 +20,7 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditProduct',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'ProductEdit',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>

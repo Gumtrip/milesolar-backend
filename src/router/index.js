@@ -176,14 +176,14 @@ export const asyncRoutes = [
 
       {
         path: 'cate/create',
-        component: () => import('@/views/article_category/create'),
+        component: () => import('@/views/article_cate/create'),
         name: 'ArticleCateCreate',
         meta: { title: '新增文章分类', icon: 'edit', noCache: true },
         hidden: true
       },
       {
         path: 'cate/edit/:id(\\d+)',
-        component: () => import('@/views/article_category/edit'),
+        component: () => import('@/views/article_cate/edit'),
         name: 'ArticleCateEdit',
         meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article_category/list' },
         hidden: true
@@ -331,14 +331,14 @@ export const asyncRoutes = [
       },
       {
         path: 'create',
-        component: () => import('@/views/product_category/create'),
+        component: () => import('@/views/product_cate/create'),
         name: 'ProductCategoryCreate',
         meta: { title: '新增产品分类', icon: 'edit' },
         hidden: true
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/product_category/edit'),
+        component: () => import('@/views/product_cate/edit'),
         name: 'ProductCategoryEdit',
         meta: { title: '编辑产品分类', noCache: true, activeMenu: '/product_category/list' },
         hidden: true
