@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Detail from './components/Detail'
+import detail from './components/detail'
 
 export default {
   name: 'Detail',
-  components: { Detail }
+  components: { detail }
 }
 </script>
 

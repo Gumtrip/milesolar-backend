@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import Detail from './components/detail'
+import detail from './components/detail'
 
 export default {
   name: 'SettingCreate',
-  components: { Detail }
+  components: { detail }
 }
 </script>
 

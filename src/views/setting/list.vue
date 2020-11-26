@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'createSetting'}">
+      <router-link :to="{name:'SettingCreate'}">
         <el-button type="primary">添加配置</el-button>
       </router-link>
     </div>
@@ -41,7 +41,7 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSetting',params:{id:scope.row.id}}">
+          <router-link :to="{name:'SettingEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />

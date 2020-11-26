@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'CreateSample'}">
+      <router-link :to="{name:'SampleCreate'}">
         <el-button type="primary">添加分类</el-button>
       </router-link>
     </div>
@@ -41,7 +41,7 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}">
+          <router-link :to="{name:'SampleEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
