@@ -61,10 +61,10 @@
             seo标题
           </MDinput>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="SEO关键字">
           <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="SEO描述">
           <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" />
         </el-form-item>
 
