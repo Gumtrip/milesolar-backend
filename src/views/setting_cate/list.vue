@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'SettingCategoryCreate'}">
+      <router-link :to="{name:'SettingCateCreate'}">
         <el-button type="primary">添加分类</el-button>
       </router-link>
     </div>

@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import sample from './modules/sample'
+import setting from './modules/setting'
+import product from './modules/product'
+import message from './modules/message'
 
 Vue.use(Router)
 
@@ -185,197 +189,15 @@ export const asyncRoutes = [
         path: 'cate/edit/:id(\\d+)',
         component: () => import('@/views/article_cate/edit'),
         name: 'ArticleCateEdit',
-        meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article_category/list' },
+        meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article/cate/list' },
         hidden: true
       }
     ]
   },
-  {
-    path: '/sample',
-    component: Layout,
-    redirect: '/sample/list',
-    name: 'Sample',
-    meta: {
-      title: '案例',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/sample/list'),
-        name: 'SampleList',
-        meta: { title: '案例列表', icon: 'list' }
-      },
-      {
-        path: '/cate/list',
-        component: Layout,
-        redirect: '/sample_cate/list',
-        name: 'SampleCate',
-        meta: {
-          title: '案例分类列表',
-          icon: 'example'
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/sample/create'),
-        name: 'SampleCreate',
-        meta: { title: '新增案例', icon: 'edit', noCache: true },
-        hidden: true
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/sample/edit'),
-        name: 'SampleEdit',
-        meta: { title: '编辑案例', noCache: true, activeMenu: '/sample/list' },
-        hidden: true
-      },
-      {
-        path: '/cate/create',
-        component: () => import('@/views/sample/create'),
-        name: 'SampleCateCreate',
-        meta: { title: '新增案例分类', icon: 'edit', noCache: true },
-        hidden: true
-      },
-      {
-        path: '/cate/edit/:id(\\d+)',
-        component: () => import('@/views/sample/edit'),
-        name: 'SampleCateEdit',
-        meta: { title: '编辑案例分类', noCache: true, activeMenu: '/sample/list' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/setting',
-    component: Layout,
-    redirect: '/setting/list',
-    name: 'Setting',
-    meta: {
-      title: '配置',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/setting/create'),
-        name: 'SettingCreate',
-        meta: { title: '新增配置', icon: 'edit' },
-        hidden: true
-
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/setting/edit'),
-        name: 'SettingEdit',
-        meta: { title: '编辑配置', noCache: true, activeMenu: '/setting/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/setting/list'),
-        name: 'SettingList',
-        meta: { title: '配置列表', icon: 'list' }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/setting_cate/create'),
-        name: 'SettingCateCreate',
-        meta: { title: '新增配置分类', icon: 'edit' },
-        hidden: true
-
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/setting_cate/edit'),
-        name: 'SettingCateEdit', meta: { title: '编辑配置分类', noCache: true, activeMenu: '/setting_categories/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/setting_cate/list'),
-        name: 'SettingCateList',
-        meta: { title: '配置分类列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/product',
-    component: Layout,
-    redirect: '/product/list',
-    name: 'product',
-    meta: {
-      title: '产品',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/product/create'),
-        name: 'ProductCreate',
-        meta: { title: '新建产品', icon: 'edit' },
-        hidden: true
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/product/edit'),
-        name: 'ProductEdit',
-        meta: { title: '编辑产品', noCache: true, activeMenu: '/product/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/product/list'),
-        name: 'ProductList',
-        meta: { title: '产品列表', icon: 'list' }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/product_cate/create'),
-        name: 'ProductCategoryCreate',
-        meta: { title: '新增产品分类', icon: 'edit' },
-        hidden: true
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/product_cate/edit'),
-        name: 'ProductCategoryEdit',
-        meta: { title: '编辑产品分类', noCache: true, activeMenu: '/product_category/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/product_category/list'),
-        name: 'ProductCategoriesList',
-        meta: { title: '产品分类列表', icon: 'list' }
-      }
-    ]
-  },
-  {
-    path: '/messages',
-    component: Layout,
-    redirect: '/messages/list',
-    name: 'Message',
-    meta: {
-      title: '消息',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/message/edit'),
-        name: 'MessageEdit',
-        meta: { title: '消息详情', noCache: true, activeMenu: '/messages/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/message/list'),
-        name: 'MessageList',
-        meta: { title: '消息列表', icon: 'list' }
-      }
-    ]
-  },
+  sample,
+  setting,
+  product,
+  message,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
