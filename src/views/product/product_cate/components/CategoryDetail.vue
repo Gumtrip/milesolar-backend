@@ -26,6 +26,18 @@
               <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
             </el-form-item>
 
+            <el-form-item class="input-text" prop="seo_title">
+              <MDinput v-model="postForm.seo_title" :maxlength="100" name="seo_title">
+                seo标题
+              </MDinput>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="postForm.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" />
+            </el-form-item>
+
             <el-form-item>
               <el-input v-model="postForm.order" placeholder="排序" />
             </el-form-item>

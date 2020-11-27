@@ -61,7 +61,6 @@
             seo标题
           </MDinput>
         </el-form-item>
-
         <el-form-item>
           <el-input v-model="postForm.seo_keywords" type="textarea" :rows="2" placeholder="请输入SEO关键字" />
         </el-form-item>

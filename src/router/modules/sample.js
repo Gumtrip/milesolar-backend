@@ -11,14 +11,14 @@ const sample = {
   children: [
     {
       path: 'list',
-      component: () => import('@/views/sample/list'),
+      component: () => import('@/views/sample/sample/list'),
       name: 'SampleList',
       meta: { title: '案例列表', icon: 'list' }
     },
     {
       path: 'cate/list',
       name: 'SampleCateList',
-      component: () => import('@/views/sample_cate/list'),
+      component: () => import('@/views/sample/sample_cate/list'),
       meta: {
         title: '案例分类列表',
         icon: 'example'
@@ -26,28 +26,28 @@ const sample = {
     },
     {
       path: 'create',
-      component: () => import('@/views/sample/create'),
+      component: () => import('@/views/sample/sample/create'),
       name: 'SampleCreate',
       meta: { title: '新增案例', icon: 'edit', noCache: true },
       hidden: true
     },
     {
       path: 'edit/:id(\\d+)',
-      component: () => import('@/views/sample/edit'),
+      component: () => import('@/views/sample/sample/edit'),
       name: 'SampleEdit',
       meta: { title: '编辑案例', noCache: true, activeMenu: '/sample/list' },
       hidden: true
     },
     {
       path: 'cate/create',
-      component: () => import('@/views/sample_cate/create'),
+      component: () => import('@/views/sample/sample_cate/create'),
       name: 'SampleCateCreate',
       meta: { title: '新增案例分类', icon: 'edit', noCache: true },
       hidden: true
     },
     {
       path: 'cate/edit/:id(\\d+)',
-      component: () => import('@/views/sample_cate/edit'),
+      component: () => import('@/views/sample/sample_cate/edit'),
       name: 'SampleCateEdit',
       meta: { title: '编辑案例分类', noCache: true, activeMenu: '/sample/cate/list' },
       hidden: true
