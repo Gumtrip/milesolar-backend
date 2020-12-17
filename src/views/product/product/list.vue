@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'CreateProduct'}">
+      <router-link :to="{name:'ProductCreate'}">
         <el-button type="primary">添加产品</el-button>
       </router-link>
     </div>
