@@ -56,7 +56,7 @@ import './tinymce_5.5.1/plugins/toc/plugin.min.js' // 目录生成器
 import './tinymce_5.5.1/plugins/visualblocks/plugin.min.js' // 显示元素范围
 import './tinymce_5.5.1/plugins/visualchars/plugin.min.js' // 显示不可见字符
 import './tinymce_5.5.1/plugins/wordcount/plugin.min.js' // 字数统计
-import './tinymce_5.5.1/plugins/powerpaste/plugin.min.js' // 字数统计
+// import './tinymce_5.5.1/plugins/powerpaste/plugin.min.js' // 这个插件用不用正版用不了，暂时放弃
 export default {
   name: 'Tinymce',
   components: { editorImage },
