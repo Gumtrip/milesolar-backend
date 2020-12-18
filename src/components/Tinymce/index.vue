@@ -15,49 +15,48 @@
 import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
-import load from './dynamicLoadScript'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
-// import './tinymce_5.5.1/langs/zh_CN.js'
-// import './tinymce_5.5.1/plugins/advlist/plugin.min.js' // 高级列表
-// import './tinymce_5.5.1/plugins/anchor/plugin.min.js' // 锚点
-// import './tinymce_5.5.1/plugins/autolink/plugin.min.js' // 自动链接
-// import './tinymce_5.5.1/plugins/autoresize/plugin.min.js' // 编辑器高度自适应,注：plugins里引入此插件时，Init里设置的height将失效
-// import './tinymce_5.5.1/plugins/autosave/plugin.min.js' // 自动存稿
-// import './tinymce_5.5.1/plugins/charmap/plugin.min.js' // 特殊字符
-// import './tinymce_5.5.1/plugins/code/plugin.min.js' // 编辑源码
-// import './tinymce_5.5.1/plugins/codesample/plugin.min.js' // 代码示例
-// import './tinymce_5.5.1/plugins/directionality/plugin.min.js' // 文字方向
-// import './tinymce_5.5.1/plugins/emoticons/plugin.min.js' // 表情
-// import './tinymce_5.5.1/plugins/fullpage/plugin.min.js' // 文档属性
-// import './tinymce_5.5.1/plugins/fullscreen/plugin.min.js' // 全屏
-// import './tinymce_5.5.1/plugins/help/plugin.min.js' // 帮助
-// import './tinymce_5.5.1/plugins/hr/plugin.min.js' // 水平分割线
-// import './tinymce_5.5.1/plugins/image/plugin.min.js' // 插入编辑图片
-// import './tinymce_5.5.1/plugins/importcss/plugin.min.js' // 引入css
-// import './tinymce_5.5.1/plugins/insertdatetime/plugin.min.js' // 插入日期时间
-// import './tinymce_5.5.1/plugins/link/plugin.min.js' // 超链接
-// import './tinymce_5.5.1/plugins/lists/plugin.min.js' // 列表插件
-// import './tinymce_5.5.1/plugins/media/plugin.min.js' // 插入编辑媒体
-// import './tinymce_5.5.1/plugins/nonbreaking/plugin.min.js' // 插入不间断空格
-// import './tinymce_5.5.1/plugins/pagebreak/plugin.min.js' // 插入分页符
-// import './tinymce_5.5.1/plugins/paste/plugin.min.js' // 粘贴插件
-// import './tinymce_5.5.1/plugins/preview/plugin.min.js'// 预览
-// import './tinymce_5.5.1/plugins/print/plugin.min.js'// 打印
-// import './tinymce_5.5.1/plugins/quickbars/plugin.min.js' // 快速工具栏
-// import './tinymce_5.5.1/plugins/save/plugin.min.js' // 保存
-// import './tinymce_5.5.1/plugins/searchreplace/plugin.min.js' // 查找替换
-// import './tinymce_5.5.1/plugins/tabfocus/plugin.min.js' // 切入切出，按tab键切出编辑器，切入页面其他输入框中
-// import './tinymce_5.5.1/plugins/table/plugin.min.js' // 表格
-// import './tinymce_5.5.1/plugins/template/plugin.min.js' // 内容模板
-// import './tinymce_5.5.1/plugins/textcolor/plugin.min.js' // 文字颜色
-// import './tinymce_5.5.1/plugins/textpattern/plugin.min.js' // 快速排版
-// import './tinymce_5.5.1/plugins/toc/plugin.min.js' // 目录生成器
-// import './tinymce_5.5.1/plugins/visualblocks/plugin.min.js' // 显示元素范围
-// import './tinymce_5.5.1/plugins/visualchars/plugin.min.js' // 显示不可见字符
-// import './tinymce_5.5.1/plugins/wordcount/plugin.min.js' // 字数统计
+import './tinymce_5.5.1/langs/zh_CN.js'
+import './tinymce_5.5.1/plugins/advlist/plugin.min.js' // 高级列表
+import './tinymce_5.5.1/plugins/anchor/plugin.min.js' // 锚点
+import './tinymce_5.5.1/plugins/autolink/plugin.min.js' // 自动链接
+import './tinymce_5.5.1/plugins/autoresize/plugin.min.js' // 编辑器高度自适应,注：plugins里引入此插件时，Init里设置的height将失效
+import './tinymce_5.5.1/plugins/autosave/plugin.min.js' // 自动存稿
+import './tinymce_5.5.1/plugins/charmap/plugin.min.js' // 特殊字符
+import './tinymce_5.5.1/plugins/code/plugin.min.js' // 编辑源码
+import './tinymce_5.5.1/plugins/codesample/plugin.min.js' // 代码示例
+import './tinymce_5.5.1/plugins/directionality/plugin.min.js' // 文字方向
+import './tinymce_5.5.1/plugins/emoticons/plugin.min.js' // 表情
+import './tinymce_5.5.1/plugins/fullpage/plugin.min.js' // 文档属性
+import './tinymce_5.5.1/plugins/fullscreen/plugin.min.js' // 全屏
+import './tinymce_5.5.1/plugins/help/plugin.min.js' // 帮助
+import './tinymce_5.5.1/plugins/hr/plugin.min.js' // 水平分割线
+import './tinymce_5.5.1/plugins/image/plugin.min.js' // 插入编辑图片
+import './tinymce_5.5.1/plugins/importcss/plugin.min.js' // 引入css
+import './tinymce_5.5.1/plugins/insertdatetime/plugin.min.js' // 插入日期时间
+import './tinymce_5.5.1/plugins/link/plugin.min.js' // 超链接
+import './tinymce_5.5.1/plugins/lists/plugin.min.js' // 列表插件
+import './tinymce_5.5.1/plugins/media/plugin.min.js' // 插入编辑媒体
+import './tinymce_5.5.1/plugins/nonbreaking/plugin.min.js' // 插入不间断空格
+import './tinymce_5.5.1/plugins/pagebreak/plugin.min.js' // 插入分页符
+import './tinymce_5.5.1/plugins/paste/plugin.min.js' // 粘贴插件
+import './tinymce_5.5.1/plugins/preview/plugin.min.js'// 预览
+import './tinymce_5.5.1/plugins/print/plugin.min.js'// 打印
+import './tinymce_5.5.1/plugins/quickbars/plugin.min.js' // 快速工具栏
+import './tinymce_5.5.1/plugins/save/plugin.min.js' // 保存
+import './tinymce_5.5.1/plugins/searchreplace/plugin.min.js' // 查找替换
+import './tinymce_5.5.1/plugins/tabfocus/plugin.min.js' // 切入切出，按tab键切出编辑器，切入页面其他输入框中
+import './tinymce_5.5.1/plugins/table/plugin.min.js' // 表格
+import './tinymce_5.5.1/plugins/template/plugin.min.js' // 内容模板
+import './tinymce_5.5.1/plugins/textcolor/plugin.min.js' // 文字颜色
+import './tinymce_5.5.1/plugins/textpattern/plugin.min.js' // 快速排版
+import './tinymce_5.5.1/plugins/toc/plugin.min.js' // 目录生成器
+import './tinymce_5.5.1/plugins/visualblocks/plugin.min.js' // 显示元素范围
+import './tinymce_5.5.1/plugins/visualchars/plugin.min.js' // 显示不可见字符
+import './tinymce_5.5.1/plugins/wordcount/plugin.min.js' // 字数统计
+import './tinymce_5.5.1/plugins/powerpaste/plugin.min.js' // 字数统计
 export default {
   name: 'Tinymce',
   components: { editorImage },
@@ -145,15 +144,7 @@ export default {
   },
   methods: {
     init() {
-      // dynamic load tinymce from cdn
-      load(tinymceCDN, (err) => {
-        if (err) {
-          this.$message.error(err.message)
-          return
-        }
-        this.initTinymce()
-      })
-      // this.initTinymce()
+      this.initTinymce()
     },
     initTinymce() {
       const _this = this
@@ -274,8 +265,8 @@ export default {
   position: absolute;
   right: 4px;
   top: 4px;
-  z-index: 1
-  /*z-index: 2005;*/
+  /*z-index: 1*/
+  z-index: 2005;
 }
 .fullscreen .editor-custom-btn-container {
   z-index: 10000;
