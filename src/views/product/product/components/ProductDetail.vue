@@ -163,7 +163,6 @@ export default {
         this.postForm.info_0_m = response.data.info_group.info_0_m
         this.postForm.info_1_m = response.data.info_group.info_1_m
         this.postForm.info_2_m = response.data.info_group.info_2_m
-        this.postForm.images = response.data.path_group
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -227,31 +226,6 @@ export default {
   @import "~@/styles/mixin.scss";
   .input-text {
     margin-bottom: 40px
-  }
-
-  .createPost-container {
-    position: relative;
-
-    .createPost-main-container {
-      padding: 40px 45px 20px 50px;
-
-      .postInfo-container {
-        position: relative;
-        @include clearfix;
-        margin-bottom: 10px;
-
-        .postInfo-container-item {
-          float: left;
-        }
-      }
-    }
-
-    .word-counter {
-      width: 40px;
-      position: absolute;
-      right: 10px;
-      top: 0px;
-    }
   }
 
   .article_content {

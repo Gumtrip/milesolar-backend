@@ -121,30 +121,6 @@ export default {
   @import "~@/styles/mixin.scss";
   .productTitle{margin: 0}
   .thumbImage{width: 150px;height: 150px}
-  .createPost-container {
-    position: relative;
-
-    .createPost-main-container {
-      padding: 40px 45px 20px 50px;
-
-      .postInfo-container {
-        position: relative;
-        @include clearfix;
-        margin-bottom: 10px;
-
-        .postInfo-container-item {
-          float: left;
-        }
-      }
-    }
-
-    .word-counter {
-      width: 40px;
-      position: absolute;
-      right: 10px;
-      top: 0px;
-    }
-  }
 
   .article-textarea /deep/ {
     textarea {

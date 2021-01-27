@@ -17,7 +17,7 @@
     </div>
     <div v-show="value.length>0" class="image-preview">
       <div v-for="(img,key) in value" :key="key" class="image-preview-wrapper">
-        <img :src="imageUrl(img)">
+        <img :src="imageUrl(img.path)">
         <div class="image-preview-action">
           <i class="el-icon-delete" @click="rmImage(img)" />
         </div>
@@ -53,6 +53,8 @@ export default {
   },
   watch: {
   },
+  created() {
+  },
 
   methods: {
     rmImage(img) {
@@ -64,7 +66,7 @@ export default {
       this.$emit('input', val)
     },
     handleImageSuccess(res, file) {
-      this.value.push(res.path)
+      this.value.push(res)
       this.emitInput(this.value)
     },
     beforeUpload(file) {

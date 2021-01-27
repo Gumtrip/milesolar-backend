@@ -5,6 +5,7 @@ import setting from './modules/setting'
 import product from './modules/product'
 import message from './modules/message'
 import article from './modules/article'
+import page from './modules/page'
 
 Vue.use(Router)
 
@@ -145,6 +146,7 @@ export const asyncRoutes = [
   sample,
   setting,
   product,
+  page,
   message,
 
   // 404 page must be placed at the end !!!

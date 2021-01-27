@@ -1,3 +1,4 @@
+@import "mixin.scss";
 .picBox{text-align: center;font-size: 0;overflow: hidden;
   span{content: ''; display: inline-block; width: 0;height: 100%; vertical-align: middle;}
   div.pic{display: inline-block;vertical-align: middle;}
@@ -14,4 +15,28 @@
   .el-form-item label{font-size: 16px;font-weight: bold}
   input[type=text]{width: 248px;border-radius:  4px 0 0 4px ;}
   .searchBtn{cursor: pointer;border-radius:0  4px 4px 0 ;width: 32px;height: 32px;box-sizing: content-box;display: inline-block;border: 1px solid #dcdfe6;border-left: none}
+}
+.createPost-container {
+  position: relative;
+
+  .createPost-main-container {
+    padding: 40px 45px 20px 50px;
+
+    .postInfo-container {
+      position: relative;
+      @include clearfix;
+      margin-bottom: 10px;
+
+      .postInfo-container-item {
+        float: left;
+      }
+    }
+  }
+
+  .word-counter {
+    width: 40px;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+  }
 }
