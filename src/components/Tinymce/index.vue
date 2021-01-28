@@ -122,14 +122,18 @@ export default {
   },
   watch: {
     value(val) {
-      // if (!this.hasChange && this.hasInit) {
-      this.$nextTick(() =>
-        window.tinymce.get(this.tinymceId).setContent(val || ''))
+      if (!this.hasChange && this.hasInit) {
+        this.$nextTick(() =>
+          window.tinymce.get(this.tinymceId).setContent(val || ''))
+      }
     }
-    // }
   },
-  mounted() {
-    this.init()
+  async mounted() {
+    await this.init()
+    const _this = this
+    setTimeout(function() {
+      window.tinymce.get(_this.tinymceId).setContent(_this.value || '')
+    }, 500)
   },
   activated() {
     if (window.tinymce) {
