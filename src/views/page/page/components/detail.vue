@@ -13,12 +13,18 @@
         <el-form-item class="input-text" prop="title" label="标题">
           <el-input v-model="postForm.title" placeholder="标题" />
         </el-form-item>
-
+        <el-form-item class="input-text" prop="brief" label="简介">
+          <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="简介" />
+        </el-form-item>
         <el-form-item prop="desc" class="sample_content">
           <label>详细内容:</label>
           <Tinymce ref="editor" v-model="postForm.content" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
-        <el-form-item prop="image">
+        <el-form-item prop="img" label="主图">
+          <SingleUpload v-model="postForm.image" :upload-config="uploadConfig" />
+        </el-form-item>
+
+        <el-form-item prop="image" label="轮播图">
           <Upload v-model="postForm.images" :upload-config="uploadConfig" />
         </el-form-item>
 
@@ -41,6 +47,7 @@
 <script>
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage2'
+import SingleUpload from '@/components/Upload/SingleImage'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchPage, createPage, updatePage } from '@/api/page'
 import moment from 'moment'
@@ -57,7 +64,7 @@ const defaultForm = {
 
 export default {
   name: 'Detail',
-  components: { Tinymce, Upload, Sticky },
+  components: { Tinymce, Upload, Sticky, SingleUpload },
   props: {
     isEdit: {
       type: Boolean,

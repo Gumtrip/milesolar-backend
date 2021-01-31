@@ -113,7 +113,7 @@ export default {
     }
 
     .image-preview {
-      width: 90%;
+      width: 80%;
       @include clearfix;
       float: left;
       .image-preview-wrapper {

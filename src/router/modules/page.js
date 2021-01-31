@@ -19,14 +19,14 @@ const sample = {
       path: 'create',
       component: () => import('@/views/page/page/create'),
       name: 'PageCreate',
-      meta: { title: '新增案例', icon: 'edit', noCache: true },
+      meta: { title: '新增单页', icon: 'edit', noCache: true, activeMenu: '/pages/list' },
       hidden: true
     },
     {
       path: 'edit/:id(\\d+)',
       component: () => import('@/views/page/page/edit'),
       name: 'PageEdit',
-      meta: { title: '编辑案例', noCache: true, activeMenu: '/sample/list' },
+      meta: { title: '编辑单页', noCache: true, activeMenu: '/pages/list' },
       hidden: true
     }
 
