@@ -14,7 +14,7 @@
           <el-input v-model="postForm.title" placeholder="标题" />
         </el-form-item>
         <el-form-item class="input-text" prop="brief" label="简介">
-          <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="简介" />
+          <el-input v-model="postForm.brief" type="textarea" :rows="10" placeholder="简介" />
         </el-form-item>
         <el-form-item prop="desc" class="sample_content">
           <label>详细内容:</label>
