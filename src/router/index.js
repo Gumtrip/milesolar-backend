@@ -6,6 +6,7 @@ import product from './modules/product'
 import message from './modules/message'
 import article from './modules/article'
 import page from './modules/page'
+import order from './modules/order'
 
 Vue.use(Router)
 
@@ -109,45 +110,13 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   /** when your routing map is too long, you can split it into small modules **/
-  {
-    path: '/order',
-    component: Layout,
-    redirect: '/order/list',
-    name: 'order',
-    meta: {
-      title: '订单',
-      icon: 'example',
-      hidden: true
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/order/create'),
-        name: 'CreateOrder',
-        meta: { title: '新增订单', icon: 'edit' },
-        hidden: true
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/order/edit'),
-        name: 'EditOrder',
-        meta: { title: '编辑订单', noCache: true, activeMenu: '/order/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/order/list'),
-        name: 'OrderList',
-        meta: { title: '订单列表', icon: 'list' }
-      }
-    ]
-  },
   article,
   sample,
   setting,
   product,
   page,
   message,
+  order,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

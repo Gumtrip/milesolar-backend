@@ -209,7 +209,7 @@ export default {
     margin-bottom: 30px;
   }
 
-  .sample-textarea /deep/ {
+  .sample-textarea ::v-deep {
     textarea {
       padding-right: 40px;
       resize: none;

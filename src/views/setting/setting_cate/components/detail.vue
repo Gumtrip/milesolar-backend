@@ -140,7 +140,7 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
 
-  .article-textarea /deep/ {
+  .article-textarea ::v-deep {
     textarea {
       padding-right: 40px;
       resize: none;

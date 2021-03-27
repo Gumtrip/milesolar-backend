@@ -555,7 +555,7 @@
   }
   function Q(a) {
       if (a < 0)
-          a0("Bytes.create");
+          a0("create");
       return new M(a ? 2 : 9,e,a)
   }
   function aH(a, b) {
@@ -1299,7 +1299,7 @@
   }
   function aG(a) {
       if (a < 0)
-          a0("String.create");
+          a0("create");
       return new M(a ? 2 : 9,e,a)
   }
   function gZ() {}

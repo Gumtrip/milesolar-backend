@@ -7,7 +7,7 @@
         </el-form-item>
         <button type="button" class="searchBtn" @click="getList"><i class="el-icon-search" /></button>
       </el-form>
-      <router-link :to="{name:'CreateOrder'}">
+      <router-link :to="{name:'OrderCreate'}">
         <el-button type="primary">添加订单</el-button>
       </router-link>
     </div>
@@ -20,7 +20,7 @@
 
       <el-table-column min-width="300px" label="订单号">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'OrderCreate',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.no }}</span>
           </router-link>
         </template>
@@ -43,7 +43,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditSample',params:{id:scope.row.id}}">
+          <router-link class="mr-10" :to="{name:'OrderEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
@@ -61,11 +61,11 @@
 </template>
 
 <script>
-import { fetchOrders, deleteSample } from '@/api/order'
+import { fetchOrders, deleteOrder } from '@/api/order'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'SampleList',
+  name: 'OrderList',
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -103,7 +103,7 @@ export default {
     },
     deleteItem(id) {
       this.$confirm('确认删除？').then(() => {
-        deleteSample(id).then(() => {
+        deleteOrder(id).then(() => {
           this.$message({
             message: '删除成功！',
             type: 'success'

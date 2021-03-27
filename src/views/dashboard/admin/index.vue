@@ -65,7 +65,7 @@ export default {
       const res = await fetchTotalVisitorsAndPageViews({
         start: end,
         end: start
-      },)
+      })
       const visitors = []
       const pageViews = []
       for (const item of res.data) {
