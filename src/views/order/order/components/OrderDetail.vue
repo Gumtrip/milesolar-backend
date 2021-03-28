@@ -32,7 +32,7 @@
         </el-form-item>
         <div id="itemBox">
           <div class="mb-10">
-            <el-button type="primary">选择产品</el-button>
+            <el-button type="primary" @click="showPop=true">选择产品</el-button>
           </div>
           <el-table
             ref="mulTable"
@@ -63,11 +63,13 @@
         </el-form-item>
       </div>
     </el-form>
+    <products :dialog="showPop" :equipages="postForm.order_items" @close-dia="showPop=false" />
   </div>
 </template>
 
 <script>
 import Sticky from '@/components/Sticky' // 粘性header组件
+import Products from './Products' // 粘性header组件
 import { fetchOrder, createOrder, updateOrder } from '@/api/order'
 import { fetchClients } from '@/api/client'
 import moment from 'moment'
@@ -77,12 +79,12 @@ const defaultForm = {
   clients: null,
   currency: 'CNY',
   id: undefined,
-  order_items: null
+  order_items: []
 }
 
 export default {
   name: 'OrderDetail',
-  components: { Sticky },
+  components: { Sticky, Products },
   props: {
     isEdit: {
       type: Boolean,
@@ -97,6 +99,7 @@ export default {
       clients: {},
       loading: false,
       updateDate: '',
+      showPop: false,
       rules: {
       }
     }
@@ -124,7 +127,7 @@ export default {
       const valid = await this.$refs.postForm.validate()
       try {
         if (valid) {
-          // this.loading = true
+          this.loading = true
           let res
           if (this.isEdit) {
             res = await updateOrder(this.id, this.postForm)

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
+import qs from 'qs'
 import { getToken } from '@/utils/auth'
 import { dataTransform, errorMessage } from '@/utils/api-handle'
 // create an axios instance
@@ -20,6 +21,12 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['X-Token'] = getToken()
+    }
+
+    if (config.method === 'get') { // 允许get 方法传递数组
+      config.paramsSerializer = function(params) {
+        return qs.stringify(params, { arrayFormat: 'repeat' })
+      }
     }
     return config
   },

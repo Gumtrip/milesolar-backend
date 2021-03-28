@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchProducts(query) {
+export function fetchProducts(params) {
   return request({
     url: 'admin/products',
     method: 'get',
-    params: query
+    params: params
   })
 }
 
