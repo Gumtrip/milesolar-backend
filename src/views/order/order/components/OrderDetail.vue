@@ -42,20 +42,50 @@
             :data="postForm.order_items"
             style="width: 100%"
           >
+            <el-table-column label="序号" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="名称" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="图片" width="180">
+              <template slot-scope="scope">
+                <div class="picBox">
+                  <img :src="scope.row.img" alt="">
+                </div>
+              </template>
+            </el-table-column>
+
             <el-table-column
-              prop="date"
-              label="名称"
-              width="180"
-            />
+              align="center"
+              label="产品数量"
+            >
+              <template slot-scope="scope">
+                <el-input-number v-model="postForm.order_items[scope.$index].amount" :min="1" />
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="name"
-              label="姓名"
-              width="180"
-            />
+              width="260"
+              align="center"
+              label="实收"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="postForm.order_items[scope.$index].price" class="text-center" placeholder="实收" />
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="address"
-              label="地址"
-            />
+              align="center"
+              label="操作"
+            >
+              <template slot-scope="scope">
+                <span class="delBtn pointer" @click="delItem(scope.$index)">删除</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <el-form-item label="备注:" prop="remark">
@@ -63,20 +93,20 @@
         </el-form-item>
       </div>
     </el-form>
-    <products :dialog="showPop" :equipages="postForm.order_items" @close-dia="showPop=false" />
+    <products :dialog="showPop" :items="postForm.order_items" @close-dia="showPop=false" @pass-items="getItems" />
   </div>
 </template>
 
 <script>
-import Sticky from '@/components/Sticky' // 粘性header组件
-import Products from './Products' // 粘性header组件
+import Sticky from '@/components/Sticky'
+import Products from './Products'
 import { fetchOrder, createOrder, updateOrder } from '@/api/order'
 import { fetchClients } from '@/api/client'
 import moment from 'moment'
 
 const defaultForm = {
   exchange_rate: 1,
-  clients: null,
+  client_id: null,
   currency: 'CNY',
   id: undefined,
   order_items: []
@@ -112,16 +142,18 @@ export default {
       this.fetchData(id)
     }
     this.getClients()
-    this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     async fetchData(id) {
-      const res = await fetchOrder(id)
+      const res = await fetchOrder(id, { include: 'order_items,expenses' })
       this.postForm = res.data
     },
     async getClients() {
       const res = await fetchClients()
       this.clients = res.data.data
+    },
+    getItems(items) {
+      this.postForm.order_items = items
     },
     async submitForm() {
       const valid = await this.$refs.postForm.validate()
@@ -136,9 +168,8 @@ export default {
           }
 
           if (res.status === 201) {
-            this.postForm = {}
-            this.$refs.editor.setContent('')
             this.$notify({ title: '成功', message: '创建成功', type: 'success' })
+            this.$router.push({ name: 'OrderEdit', params: { id: res.data.id }})
           }
           if (res.status === 200) {
             this.updateDate = moment().format('YYYY-MM-DD H:m:s')
@@ -153,8 +184,10 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    delItem(index) {
+      this.postForm.order_items.splice(index, 1)
     }
-
   }
 }
 </script>
@@ -165,5 +198,6 @@ export default {
     display: flex;
     .el-input--suffix{width: 100px}
   }
+  .picBox{width: 50px;height: 50px;margin: 0 auto}
   #itemBox{margin-bottom: 20px}
 </style>

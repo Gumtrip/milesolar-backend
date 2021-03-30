@@ -12,7 +12,7 @@ export function fetchOrder(id, params) {
   return request({
     url: 'admin/orders/' + id,
     method: 'get',
-    params: { params }
+    params: params
   })
 }
 

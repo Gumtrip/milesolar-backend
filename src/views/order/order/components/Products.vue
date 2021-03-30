@@ -29,11 +29,20 @@
             <span>{{ scope.row.title }}</span>
           </template>
         </el-table-column>
+        <el-table-column align="center" label="产品图片">
+          <template slot-scope="scope">
+            <div class="picBox">
+              <span>
+                <img :src="scope.row.main_image">
+              </span>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
       <div id="dia-footer">
         <el-pagination v-show="total>0" :total="total" layout="prev,pager,next" background :page-size="listQuery.size" class="fl" @current-change="changePage" />
         <el-button class="fr" @click="onClose">返回</el-button>
-        <el-button class="fr mr-10" type="primary">确认选择</el-button>
+        <el-button class="fr mr-10" type="primary" @click="chooseItems">确认选择</el-button>
         <div class="clearfix" />
       </div>
     </el-dialog>
@@ -42,6 +51,8 @@
 
 <script>
 import { fetchProducts } from '@/api/product'
+import { indexOf } from 'lodash'
+
 export default {
   name: 'EquDialog',
   props: {
@@ -49,14 +60,14 @@ export default {
       type: Boolean,
       default: false
     },
-    equipages: {
+    items: {
       type: Array,
       default: () => function() { return [] }
     }
   },
   data() {
     return {
-      show: true,
+      show: false,
       total: 0,
       listQuery: {
         page: 1,
@@ -93,8 +104,34 @@ export default {
       this.listQuery.page = page
       await this.getItems()
     },
-    handleSelectionChange() {
+    handleSelectionChange(val) { // 勾选多选
+      this.multipleSelection = val
+    },
+    chooseItems() { // 点击选择按钮
+      this.show = false
+      const selections = []
+      const itemIds = []
+      let items = this.items
 
+      this.multipleSelection.forEach(item => {
+        selections.push(item.id)
+      })
+      this.items.forEach(row => {
+        itemIds.push(row.id)
+      })
+      // 没有才增加
+      selections.forEach((id, key) => {
+        if (indexOf(itemIds, id) === -1) {
+          items = items.concat({
+            id: this.multipleSelection[key].id,
+            name: this.multipleSelection[key].title,
+            img: this.multipleSelection[key].main_image,
+            price: 1, // 默认1
+            amount: 1 // 默认是1
+          })
+        }
+      })
+      this.$emit('pass-items', items)
     }
   }
 
@@ -108,5 +145,5 @@ export default {
     .el-table__row{cursor: pointer}
   }
   #userTable{margin-bottom: 20px}
-  #dia-footer{}
+  .picBox{width: 80px;height: 80px;margin: 0 auto}
 </style>
