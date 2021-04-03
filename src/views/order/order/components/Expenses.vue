@@ -7,38 +7,14 @@
       center
       @close="onClose"
     >
-      <div class="listFunBox">
-        <el-form ref="form" :model="listQuery" label-width="80px">
-          <el-form-item label="产品列表" style="width: 248px">
-            <el-input v-model="listQuery.filter.title" placeholder="输入产品名字" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="getItems" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-table id="userTable" ref="mulTable" :data="list" stripe fit highlight-current-row style="width: 100%" class="listTable" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="50" />
-        <el-table-column align="center" label="序号" width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="产品名称">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="产品图片">
-          <template slot-scope="scope">
-            <div class="picBox">
-              <span>
-                <img :src="scope.row.main_image">
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-form ref="form" :model="listQuery" label-width="80px">
+        <el-form-item label="产品列表" style="width: 248px">
+          <el-input v-model="listQuery.filter.title" placeholder="输入产品名字" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="getItems" />
+        </el-form-item>
+      </el-form>
       <div id="dia-footer">
         <el-pagination v-show="total>0" :total="total" layout="prev,pager,next" background :page-size="listQuery.size" class="fl" @current-change="changePage" />
         <el-button class="fr" @click="onClose">返回</el-button>
@@ -54,11 +30,11 @@ import { fetchProducts } from '@/api/product'
 import { indexOf } from 'lodash'
 
 export default {
-  name: 'Product',
+  name: 'Expenses',
   props: {
     dialog: {
       type: Boolean,
-      default: false
+      default: true
     },
     items: {
       type: Array,

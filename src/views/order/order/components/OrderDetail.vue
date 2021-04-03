@@ -88,17 +88,150 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <!--收款进度-->
+        <div id="proceedBox">
+          <div class="mb-10">
+            <el-button type="primary" @click="showPop=true">添加收款</el-button>
+          </div>
+          <el-table
+            stripe
+            fit
+            highlight-current-row
+            :data="postForm.order_proceeds"
+            style="width: 100%"
+          >
+            <el-table-column label="序号" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="名称" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="币种" width="180">
+              <template slot-scope="scope">
+                <div class="picBox">
+                  <img :src="scope.row.currency" alt="">
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              align="center"
+              label="收款金额"
+            >
+              <template slot-scope="scope">
+                <el-input-number v-model="postForm.order_items[scope.$index].amount" :min="1" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="260"
+              align="center"
+              label="汇率"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="postForm.order_items[scope.$index].price" class="text-center" placeholder="实收" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="260"
+              align="center"
+              label="人命币金额"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="postForm.order_items[scope.$index].price" class="text-center" placeholder="实收" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="操作"
+            >
+              <template slot-scope="scope">
+                <span class="delBtn pointer" @click="delItem(scope.$index)">删除</span>
+              </template>
+            </el-table-column>
+          </el-table>
+
+        </div>
+        <!--订单支出-->
+        <div id="expenseBox">
+          <div class="mb-10">
+            <el-button type="primary" @click="showPop=true">添加支出</el-button>
+          </div>
+          <el-table
+            ref="mulTable"
+            stripe
+            fit
+            highlight-current-row
+            :data="postForm.order_items"
+            style="width: 100%"
+          >
+            <el-table-column label="序号" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="名称" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="图片" width="180">
+              <template slot-scope="scope">
+                <div class="picBox">
+                  <img :src="scope.row.img" alt="">
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              align="center"
+              label="产品数量"
+            >
+              <template slot-scope="scope">
+                <el-input-number v-model="postForm.order_items[scope.$index].amount" :min="1" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="260"
+              align="center"
+              label="实收"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="postForm.order_items[scope.$index].price" class="text-center" placeholder="实收" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="操作"
+            >
+              <template slot-scope="scope">
+                <span class="delBtn pointer" @click="delItem(scope.$index)">删除</span>
+              </template>
+            </el-table-column>
+          </el-table>
+
+        </div>
         <el-form-item label="备注:" prop="remark">
           <el-input v-model="postForm.remark" type="textarea" class="midFormInput" rows="4" placeholder="备注" />
         </el-form-item>
       </div>
     </el-form>
     <products :dialog="showPop" :items="postForm.order_items" @close-dia="showPop=false" @pass-items="getItems" />
+    <expenses :dialog="expenseBox" :items="postForm.expenses" @close-dia="expenseBox=false" @pass-items="getExpenses" />
+    <proceeds :dialog="proceedBox" :items="postForm.proceeds" @close-dia="proceedBox=false" @pass-items="getProceeds" />
   </div>
 </template>
 
 <script>
 import Sticky from '@/components/Sticky'
+import Expenses from './Expenses'
+import Proceeds from './Proceeds'
 import Products from './Products'
 import { fetchOrder, createOrder, updateOrder } from '@/api/order'
 import { fetchClients } from '@/api/client'
@@ -114,7 +247,7 @@ const defaultForm = {
 
 export default {
   name: 'OrderDetail',
-  components: { Sticky, Products },
+  components: { Sticky, Products, Expenses, Proceeds },
   props: {
     isEdit: {
       type: Boolean,
@@ -129,7 +262,9 @@ export default {
       clients: {},
       loading: false,
       updateDate: '',
-      showPop: false,
+      showPop: false, // 订单产品弹出层
+      proceedBox: false, // 支出收款弹出层
+      expenseBox: false, // 支出弹出层
       rules: {
       }
     }
@@ -145,7 +280,7 @@ export default {
   },
   methods: {
     async fetchData(id) {
-      const res = await fetchOrder(id, { include: 'order_items,expenses' })
+      const res = await fetchOrder(id, { include: 'order_items,expenses,proceeds' })
       this.postForm = res.data
     },
     async getClients() {
@@ -153,6 +288,12 @@ export default {
       this.clients = res.data.data
     },
     getItems(items) {
+      this.postForm.order_items = items
+    },
+    getExpenses(items) {
+      this.postForm.order_items = items
+    },
+    getProceeds(items) {
       this.postForm.order_items = items
     },
     async submitForm() {

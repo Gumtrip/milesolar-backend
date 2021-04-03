@@ -54,7 +54,7 @@ import { fetchProducts } from '@/api/product'
 import { indexOf } from 'lodash'
 
 export default {
-  name: 'Product',
+  name: 'Proceeds',
   props: {
     dialog: {
       type: Boolean,
