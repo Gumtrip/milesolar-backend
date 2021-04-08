@@ -1,4 +1,5 @@
 @import "mixin.scss";
+@import "variables.scss";
 .picBox{text-align: center;font-size: 0;overflow: hidden;
   span{content: ''; display: inline-block; width: 0;height: 100%; vertical-align: middle;}
   div.pic{display: inline-block;vertical-align: middle;}
@@ -7,9 +8,11 @@
 .flexPic{display: flex;align-items: center;justify-content: center;
   img{max-height: 100%;max-width: 100%}
 }
+.red-text{color: $red}
 .nowrap {white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mr-10{margin-right: 10px}
 .mb-10{margin-bottom: 10px}
+.mb-20{margin-bottom: 20px}
 .midFormInput{width: 460px}
 .smFormInput{width: 300px}
 .pointer{cursor: pointer}
