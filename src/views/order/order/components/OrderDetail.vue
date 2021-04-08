@@ -27,7 +27,7 @@
           <el-input v-model="postForm.exchange_rate" class="midFormInput" type="number" placeholder="汇率" />
         </el-form-item>
 
-        <el-form-item label="人民币收入:">
+        <el-form-item v-if="isEdit" label="人民币收入:">
           <el-input v-model="postForm.rmb_total_amount" :readonly="true" class="midFormInput" type="number" placeholder="人民币收入" />
         </el-form-item>
         <div id="itemBox">
@@ -145,31 +145,26 @@
                 <span>{{ scope.$index }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="币种" width="180">
-              <template slot-scope="scope">
-                <el-input v-model="postForm.proceeds[scope.$index].currency" />
-              </template>
-            </el-table-column>
-            <el-table-column label="总价(CNY)" width="180">
-              <template slot-scope="scope">
-                <el-input v-model="postForm.proceeds[scope.$index].total_amount" type="number" />
-              </template>
-            </el-table-column>
+            <el-table-column label="币种" prop="currency" />
+            <el-table-column label="总价(CNY)" prop="total_amount" />
             <el-table-column
               align="center"
               label="汇率"
               width="100"
-            >
-              <template slot-scope="scope">
-                <el-input v-model="postForm.proceeds[scope.$index].exchange_rate" />
-              </template>
-            </el-table-column>
+              prop="exchange_rate"
+            />
+            <el-table-column
+              align="center"
+              label="人民币总额"
+              prop="rmb_total_amount"
+            />
             <el-table-column
               align="center"
               label="操作"
             >
               <template slot-scope="scope">
-                <span class="delBtn pointer red-text" @click="delItem(scope.$index)">删除</span>
+                <span class="pointer mr-10" @click="editProceed(scope.row)">编辑</span>
+                <span class="delBtn pointer red-text" @click="delProceed(scope.row)">删除</span>
               </template>
             </el-table-column>
           </el-table>
@@ -182,7 +177,8 @@
       </div>
     </el-form>
     <products v-if="postForm.order_items" :dialog="showPop" :items="postForm.order_items" @close-dia="showPop=false" @pass-items="getItems" />
-    <expenses v-if="postForm.expenses" :id="expenseId" :dialog="proceedBox" :order="postForm" @close-dia="proceedBox=false" @update-order="updateOrder" />
+    <expenses v-if="postForm.expenses" :id="expenseId" :dialog="expenseBox" :order="postForm" @close-dia="expenseBox=false" @update-order="updateOrder" />
+    <proceed v-if="postForm.expenses" :id="proceedId" :dialog="proceedBox" :order="postForm" @close-dia="proceedBox=false" @update-order="updateOrder" />
 
   </div>
 </template>
@@ -191,7 +187,8 @@
 import Sticky from '@/components/Sticky'
 import Products from './Products'
 import Expenses from './Expenses'
-import { fetchOrder, createOrder, updateOrder, deleteOrderExpense } from '@/api/order'
+import Proceed from './Proceed'
+import { fetchOrder, createOrder, updateOrder, deleteOrderExpense, deleteOrderProceed } from '@/api/order'
 import { fetchClients } from '@/api/client'
 import moment from 'moment'
 
@@ -205,7 +202,7 @@ const defaultForm = {
 
 export default {
   name: 'OrderDetail',
-  components: { Sticky, Products, Expenses },
+  components: { Sticky, Products, Expenses, Proceed },
   props: {
     isEdit: {
       type: Boolean,
@@ -219,11 +216,12 @@ export default {
       categories: {},
       clients: {},
       expenseId: null,
+      proceedId: null,
       loading: false,
       updateDate: '',
       showPop: false, // 订单产品弹出层
-      proceedBox: false, // 支出收款弹出层
       expenseBox: false, // 支出弹出层
+      proceedBox: false, // 支出收款弹出层
       rules: {
         exchange_rate: [{ required: true, message: '汇率收入是必填的', trigger: 'blur' }]
       }
@@ -253,12 +251,13 @@ export default {
     updateOrder() {
       this.fetchData(this.id)
     },
+    // 支出
     addExpense() {
-      this.proceedBox = true
+      this.expenseBox = true
       this.expenseId = null
     },
     editExpense(item) {
-      this.proceedBox = true
+      this.expenseBox = true
       this.expenseId = item.id
     },
     delExpense(item) {
@@ -275,20 +274,35 @@ export default {
           console.log(e)
         })
     },
+    // 支出
+    // 付款进度
     addProceed(items) {
-
+      this.proceedBox = true
+      this.proceedId = null
     },
-    editProceed() {
-
+    editProceed(item) {
+      this.proceedBox = true
+      this.proceedId = item.id
     },
-    delProceed() {
-
+    delProceed(item) {
+      this.$confirm('确认删除？').then(() => {
+        deleteOrderProceed(item.id).then(() => {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          this.fetchData(this.id)
+        })
+      })
+        .catch((e) => {
+          console.log(e)
+        })
     },
+    // 付款进度
+
     async submitForm() {
       try {
         const valid = await this.$refs.postForm.validate()
-        console.log(this.$refs.postForm)
-        console.log(valid)
         if (valid) {
           this.loading = true
           let res
@@ -313,6 +327,7 @@ export default {
           this.loading = false
         }
       } catch (e) {
+        this.loading = false
         console.log(e)
       }
     },

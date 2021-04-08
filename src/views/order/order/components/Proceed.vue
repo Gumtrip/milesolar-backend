@@ -3,20 +3,23 @@
     <el-dialog
       id="userDia"
       :visible.sync="show"
-      title="添加支出"
+      title="添加收款"
       width="800px"
       center
       @close="onClose"
     >
-      <el-form ref="postForm" :rules="postForm" :model="postForm" label-width="140px">
-        <el-form-item class="required" label="支出名称:" prop="title">
-          <el-input v-model="postForm.title" />
+      <el-form ref="postForm" :model="postForm" :rules="proceedRules" label-width="100px">
+        <el-form-item label="总额:" prop="total_amount" class="totalAmount">
+          <el-input v-model="postForm.total_amount" class="midFormInput" placeholder="总额">
+            <el-select slot="prepend" v-model="postForm.currency" placeholder="货币">
+              <el-option label="人民币" value="CNY" />
+              <el-option label="美金" value="USD" />
+              <el-option label="奈拉" value="NGN" />
+            </el-select>
+          </el-input>
         </el-form-item>
-        <el-form-item class="required" label="支出总额(人民币):" prop="total_amount">
-          <el-input v-model="postForm.total_amount" />
-        </el-form-item>
-        <el-form-item label="备注:">
-          <el-input v-model="postForm.remark" type="textarea" rows="2" />
+        <el-form-item label="汇率:" prop="exchange_rate">
+          <el-input v-model="postForm.exchange_rate" />
         </el-form-item>
       </el-form>
       <div id="dia-footer">
@@ -29,17 +32,15 @@
 </template>
 
 <script>
-
-import { createOrderExpense, updateOrderExpense, fetchOrderExpense } from '@/api/order'
-
+import { createOrderProceed, updateOrderProceed, fetchOrderProceed } from '@/api/order'
 const defaultForm = {
-  title: null,
+  currency: 'CNY',
   total_amount: 0,
-  remark: '',
+  exchange_rate: 1,
   id: null
 }
 export default {
-  name: 'Expenses',
+  name: 'Proceed',
   props: {
     dialog: {
       type: Boolean,
@@ -58,9 +59,9 @@ export default {
     return {
       show: false,
       postForm: defaultForm,
-      expenseRules: {
-        title: [{ required: true, message: '支出名称是必填的', trigger: 'blur' }],
-        total_amount: [{ required: true, message: '支出总额是必填的', trigger: 'blur' }]
+      proceedRules: {
+        exchange_rate: [{ required: true, message: '汇率是必填的', trigger: 'blur' }]
+        // total_amount: [{ required: true, message: '支出总额是必填的', trigger: 'blur' }]
       }
     }
   },
@@ -70,7 +71,7 @@ export default {
     },
     id(newVal, oldVal) {
       if (newVal) {
-        this.getExpense(newVal)
+        this.getProceed(newVal)
       } else {
         this.postForm = defaultForm
       }
@@ -90,9 +91,9 @@ export default {
           this.postForm.order_id = this.order.id
           this.loading = true
           if (this.id) {
-            await updateOrderExpense(this.id, this.postForm)
+            await updateOrderProceed(this.id, this.postForm)
           } else {
-            await createOrderExpense(this.postForm)
+            await createOrderProceed(this.postForm)
           }
           this.$notify({ title: '成功', message: '操作成功', type: 'success' })
           this.$emit('update-order', true)
@@ -105,8 +106,8 @@ export default {
         console.log(e)
       }
     },
-    async getExpense(id) {
-      const res = await fetchOrderExpense(id)
+    async getProceed(id) {
+      const res = await fetchOrderProceed(id)
       this.postForm = res.data
     }
   }
@@ -115,4 +116,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .totalAmount ::v-deep {
+    display: flex;
+    .el-form-item__content{margin-left: 0!important;}
+    .el-input--suffix{width: 100px}
+  }
 </style>
