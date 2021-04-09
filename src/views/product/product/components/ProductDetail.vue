@@ -19,19 +19,28 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item prop="category_id">
+        <el-form-item prop="category_id" label="分类：">
           <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item label="简介：">
           <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item label="首页显示：">
           <el-switch
             v-model="postForm.is_index"
             active-text="首页显示"
             inactive-text="不在首页显示"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item label="上下架：">
+          <el-switch
+            v-model="postForm.status"
+            active-text="上架"
+            inactive-text="下架架"
             :active-value="1"
             :inactive-value="0"
           />
@@ -91,6 +100,7 @@ const defaultForm = {
   seo_title: '',
   seo_keywords: '',
   is_index: 0, // 首页显示
+  status: 1, // 上下架
   seo_desc: '',
   category_id: null, // 产品分类
   images: [], // 产品图片

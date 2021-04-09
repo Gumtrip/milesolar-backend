@@ -7,6 +7,7 @@ import message from './modules/message'
 import article from './modules/article'
 import page from './modules/page'
 import order from './modules/order'
+import client from './modules/client'
 
 Vue.use(Router)
 
@@ -117,6 +118,7 @@ export const asyncRoutes = [
   page,
   message,
   order,
+  client,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
