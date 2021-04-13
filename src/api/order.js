@@ -123,3 +123,45 @@ export function deleteOrderProceed(id) {
   })
 }
 
+// 订单报价-列表
+export function fetchOrderOffers(query) {
+  return request({
+    url: 'admin/order-offers',
+    method: 'get',
+    params: query
+  })
+}
+// 订单报价-详情
+
+export function fetchOrderOffer(id, params) {
+  return request({
+    url: 'admin/order-offers/' + id,
+    method: 'get',
+    params: params
+  })
+}
+// 订单报价-创建
+
+export function createOrderOffer(data) {
+  return request({
+    url: 'admin/order-offers',
+    method: 'post',
+    data: data
+  })
+}
+// 订单报价-删除
+export function deleteOrderOffer(id) {
+  return request({
+    url: 'admin/order-offers/' + id,
+    method: 'delete'
+  })
+}
+// 订单-更新
+
+export function updateOrderOffer(id, data) {
+  return request({
+    url: 'admin/order-offers/' + id,
+    method: 'patch',
+    data: data
+  })
+}

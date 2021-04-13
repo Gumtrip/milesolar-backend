@@ -32,7 +32,9 @@
         <el-table-column align="center" label="产品图片">
           <template slot-scope="scope">
             <div class="picBox">
-              <img :src="scope.row.main_image">
+              <span>
+                <img :src="scope.row.main_image">
+              </span>
             </div>
           </template>
         </el-table-column>
