@@ -124,6 +124,7 @@ export default {
             id: this.multipleSelection[key].id,
             name: this.multipleSelection[key].title,
             img: this.multipleSelection[key].main_image,
+            desc: this.multipleSelection[key].offer_desc,
             price: 1, // 默认1
             amount: 1 // 默认是1
           })

@@ -40,10 +40,10 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link :to="{name:'ProductEdit',params:{id:scope.row.id}}">
+          <router-link class="mr-10" :to="{name:'ProductEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
-          <a target="_blank" :href="baseUrl+'/products/'+scope.row.id">
+          <a target="_blank" class="mr-10" :href="baseUrl+'/products/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-view" />
           </a>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />

@@ -9,21 +9,42 @@
 
       <div class="createPost-main-container">
         <el-form-item prop="category_id" label="客户:" class="required">
-          <el-select v-model="postForm.client_id" placeholder="客户" name="category_id" required>
+          <el-select v-model="postForm.client_id" placeholder="客户" name="category_id" required @change="getClientInfo">
             <el-option v-for="(client,key) in clients" :key="key" :label="client.name" :value="client.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="总额:" prop="total_amount" class="totalAmount">
-          <el-input v-model="postForm.total_amount" class="midFormInput" type="number" placeholder="总额">
-            <el-select slot="prepend" v-model="postForm.currency" placeholder="货币">
-              <el-option label="人民币" value="CNY" />
-              <el-option label="美金" value="USD" />
-              <el-option label="奈拉" value="NGN" />
-            </el-select>
-          </el-input>
+        <div class="inlineInput">
+          <el-form-item label="客户名称:">
+            <el-input v-model="postForm.client_info.name" class="smFormInput" placeholder="客户名称" />
+          </el-form-item>
+          <el-form-item label="客户Email:">
+            <el-input v-model="postForm.client_info.email" class="smFormInput" placeholder="客户Email" />
+          </el-form-item>
+        </div>
+        <div class="inlineInput">
+          <el-form-item label="客户电话:">
+            <el-input v-model="postForm.client_info.mobile" class="smFormInput" placeholder="客户电话" />
+          </el-form-item>
+        </div>
+
+        <el-form-item label="币种:" prop="currency" class="required">
+          <el-select v-model="postForm.currency" placeholder="币种">
+            <el-option label="人民币" value="CNY" />
+            <el-option label="美金" value="USD" />
+            <el-option label="奈拉" value="NGN" />
+          </el-select>
         </el-form-item>
         <el-form-item label="汇率:" prop="exchange_rate" class="required">
           <el-input v-model="postForm.exchange_rate" class="midFormInput" type="number" placeholder="汇率" />
+        </el-form-item>
+        <el-form-item label="报价时效:" prop="offer_range" class="required">
+          <el-date-picker
+            v-model="postForm.offer_range"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
         </el-form-item>
 
         <el-form-item v-if="isEdit" label="人民币收入:">
@@ -49,7 +70,7 @@
 
             <el-table-column label="名称" width="180">
               <template slot-scope="scope">
-                <span>{{ scope.row.title }}</span>
+                <span>{{ scope.row.name }}</span>
               </template>
             </el-table-column>
             <el-table-column label="图片" width="180">
@@ -62,7 +83,7 @@
 
             <el-table-column
               align="center"
-              label="产品数量"
+              label="数量"
             >
               <template slot-scope="scope">
                 <el-input-number v-model="postForm.items[scope.$index].amount" :min="1" />
@@ -71,12 +92,23 @@
             <el-table-column
               width="260"
               align="center"
-              label="实收"
+              label="单价"
             >
               <template slot-scope="scope">
-                <el-input v-model="postForm.items[scope.$index].price" class="text-center" placeholder="实收" />
+                <el-input v-model="postForm.items[scope.$index].price" class="text-center" placeholder="实收">
+                  <template slot="prepend">{{ postForm.currency }}</template>
+                </el-input>
               </template>
             </el-table-column>
+            <el-table-column
+              align="center"
+              label="描述"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="postForm.items[scope.$index].desc" type="textarea" />
+              </template>
+            </el-table-column>
+
             <el-table-column
               align="center"
               label="操作"
@@ -88,8 +120,8 @@
           </el-table>
         </div>
 
-        <el-form-item label="备注:" prop="remark">
-          <el-input v-model="postForm.remark" type="textarea" class="midFormInput" rows="4" placeholder="备注" />
+        <el-form-item label="条款:" prop="term">
+          <el-input v-model="postForm.term" type="textarea" rows="10" placeholder="备注" />
         </el-form-item>
       </div>
     </el-form>
@@ -108,8 +140,24 @@ import { fetchClients } from '@/api/client'
 const defaultForm = {
   exchange_rate: 1,
   client_id: null,
-  currency: 'CNY',
+  client_info: {},
+  currency: 'USD',
   id: undefined,
+  term: '1. Price terms: EXW price + shipping cost to buyer\'s agent warehouse in China(The price will be adjusted while exchange rate fluctuates more than 3%(Based on 1USD=6.50RMB).\n' +
+    '2. Payment: T/T,  30% deposit, balance Should be paid before shipment.\n' +
+    '3. Lead time: 15 days after payment received.\n' +
+    '4. Packaging: Netural carton\n' +
+    '5. USD Account details:\n' +
+    'Account Name: Foshan MILE SOLAR TECHNOLOGY CO., LTD\n' +
+    'Account Number: 228 104 152 20 \n' +
+    'SWIFT/BIC: SCBLHKHH (SCBLHKHHXXX * If 11 characters are required) \n' +
+    'Address: No.138, Qingke Road, Chancheng District, Foshan, China.\n' +
+    'Bank Name: Standard Chartered Bank (Hong Kong) Limited \n' +
+    'Bank Address: Payment Centre, 15/F Standard Chartered Tower, 388 Kwun Tong Road, Hong Kong \n' +
+    'Country/Region: Hong Kong \n' +
+    'Type of Account: Business Account \n' +
+    'Bank Code: 003 \n' +
+    'Branch Code: 368 * If paying from Hong Kong banks.',
   items: []
 }
 
@@ -130,7 +178,8 @@ export default {
       loading: false,
       showPop: false, // 订单产品弹出层
       rules: {
-        exchange_rate: [{ required: true, message: '汇率收入是必填的', trigger: 'blur' }]
+        offer_range: [{ required: true, message: '报价有效期是必填的', trigger: 'blur' }],
+        term: [{ required: true, message: '条款是必填的', trigger: 'blur' }]
       }
     }
   },
@@ -168,16 +217,9 @@ export default {
             res = await updateOrderOffer(this.id, this.postForm)
           } else {
             res = await createOrderOffer(this.postForm)
+            this.$router.push({ name: 'OrderOfferEdit', params: { id: res.data.id }})
           }
-
-          if (res.status === 201) {
-            this.$notify({ title: '成功', message: '创建成功', type: 'success' })
-            this.$router.push({ name: 'OrderEdit', params: { id: res.data.id }})
-          }
-          if (res.status === 200) {
-            this.$notify({ title: '成功', message: '修改成功', type: 'success' })
-          }
-
+          this.$notify({ title: '成功', message: '操作成功', type: 'success' })
           this.loading = false
         } else {
           console.log('error submit!!')
@@ -187,6 +229,13 @@ export default {
         this.loading = false
         console.log(e)
       }
+    },
+    getClientInfo(id) {
+      this.clients.forEach(item => {
+        if (item.id === id) {
+          this.postForm.client_info = item
+        }
+      })
     }
   }
 }
@@ -200,4 +249,10 @@ export default {
   }
   .picBox{width: 50px;height: 50px;margin: 0 auto}
   #itemBox{margin-bottom: 20px}
+  .inlineInput{display: flex}
+  .inlineInput ::v-deep{
+    .el-form-item{margin-right: 20px}
+    .el-form-item--medium .el-form-item__content{float: left}
+  }
+
 </style>

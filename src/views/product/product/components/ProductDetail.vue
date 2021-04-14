@@ -27,6 +27,10 @@
           <el-input v-model="postForm.brief" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
 
+        <el-form-item label="报价简介：">
+          <el-input v-model="postForm.offer_desc" type="textarea" :rows="5" placeholder="请输入报价简介" />
+        </el-form-item>
+
         <el-form-item label="首页显示：">
           <el-switch
             v-model="postForm.is_index"
