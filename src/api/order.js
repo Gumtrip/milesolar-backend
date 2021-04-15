@@ -156,7 +156,7 @@ export function deleteOrderOffer(id) {
     method: 'delete'
   })
 }
-// 订单-更新
+// 订单报价-更新
 
 export function updateOrderOffer(id, data) {
   return request({

@@ -2,6 +2,7 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
       <sticky :z-index="10" :class-name="'sub-navbar'">
+        <a v-if="isEdit" class="el-button el-button--warning" :href="adminUrl+'export/order-offers/'+id">导出报价</a>
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           保存
         </el-button>
@@ -184,6 +185,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       clients: {},
       loading: false,
+      adminUrl: process.env.VUE_APP_ADMIN_API,
       showPop: false, // 订单产品弹出层
       rules: {
         offer_range: [{ required: true, message: '报价有效期是必填的', trigger: 'blur' }],
@@ -246,6 +248,7 @@ export default {
         }
       })
     }
+
   }
 }
 </script>
