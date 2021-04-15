@@ -46,7 +46,9 @@
             end-placeholder="结束日期"
           />
         </el-form-item>
-
+        <el-form-item v-if="isEdit" label="运费:" class="required">
+          <el-input v-model="postForm.freight" class="midFormInput" type="number" placeholder="运费" />
+        </el-form-item>
         <el-form-item v-if="isEdit" label="人民币收入:">
           <el-input v-model="postForm.rmb_total_amount" :readonly="true" class="midFormInput" type="number" placeholder="人民币收入" />
         </el-form-item>
@@ -70,7 +72,7 @@
 
             <el-table-column label="名称" width="180">
               <template slot-scope="scope">
-                <span>{{ scope.row.name }}</span>
+                <el-input v-model="postForm.items[scope.$index].title" />
               </template>
             </el-table-column>
             <el-table-column label="图片" width="180">
@@ -120,6 +122,12 @@
           </el-table>
         </div>
 
+        <ul id="calBox">
+          <li><label v-text="'产品总价:'" /><span>{{ postForm.currency }} {{ postForm.item_total_amount }}</span></li>
+          <li><label v-text="'运费:'" /><span>{{ postForm.currency }} {{ postForm.freight }}</span></li>
+          <li><label v-text="'总价:'" /><span>{{ postForm.currency }} {{ postForm.total_amount }}</span></li>
+          <li><label v-text="'人民币总价:'" /><span>￥ {{ postForm.rmb_total_amount }}</span></li>
+        </ul>
         <el-form-item label="条款:" prop="term">
           <el-input v-model="postForm.term" type="textarea" rows="10" placeholder="备注" />
         </el-form-item>
@@ -215,6 +223,7 @@ export default {
           let res
           if (this.isEdit) {
             res = await updateOrderOffer(this.id, this.postForm)
+            this.fetchData(this.id)
           } else {
             res = await createOrderOffer(this.postForm)
             this.$router.push({ name: 'OrderOfferEdit', params: { id: res.data.id }})
@@ -243,6 +252,7 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
+  @import "@/styles/variables.scss";
   .totalAmount ::v-deep {
     display: flex;
     .el-input--suffix{width: 100px}
@@ -255,4 +265,8 @@ export default {
     .el-form-item--medium .el-form-item__content{float: left}
   }
 
+  #calBox{
+    label{color:$gray;font-weight: normal ;}
+    li{display: flex;justify-content: space-between;font-size: 14px;margin-bottom: 6px}
+  }
 </style>

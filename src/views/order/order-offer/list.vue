@@ -49,7 +49,7 @@
 
       <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
-          <router-link class="mr-10" :to="{name:'OrderEdit',params:{id:scope.row.id}}">
+          <router-link class="mr-10" :to="{name:'OrderOfferEdit',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit" />
           </router-link>
           <el-button type="primary" size="small" icon="el-icon-delete" @click="deleteItem(scope.row.id)" />
