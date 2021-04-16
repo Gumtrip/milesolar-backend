@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchClients(query) {
   return request({
-    url: 'admin/clients',
+    url: 'clients',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchClients(query) {
 
 export function fetchClient(id, params) {
   return request({
-    url: 'admin/clients/' + id,
+    url: 'clients/' + id,
     method: 'get',
     params: { params }
   })
@@ -18,7 +18,7 @@ export function fetchClient(id, params) {
 
 export function createClient(data) {
   return request({
-    url: 'admin/clients',
+    url: 'clients',
     method: 'post',
     data: data
   })
@@ -26,14 +26,14 @@ export function createClient(data) {
 
 export function updateClient(id, data) {
   return request({
-    url: 'admin/clients/' + id,
+    url: 'clients/' + id,
     method: 'patch',
     data: data
   })
 }
 export function deleteClient(id) {
   return request({
-    url: 'admin/clients/' + id,
+    url: 'clients/' + id,
     method: 'delete'
   })
 }

@@ -4,7 +4,7 @@ const baseURL = 'https://milesolar.com/api/v1/'
 export function fetchVisitorsAndPageViews(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/visitors-and-page-views',
+    url: 'google/visitors-and-page-views',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function fetchVisitorsAndPageViews(query) {
 export function fetchTotalVisitorsAndPageViews(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/total-visitors-and-page-views',
+    url: 'google/total-visitors-and-page-views',
     method: 'get',
     params: query
   })
@@ -22,7 +22,7 @@ export function fetchTotalVisitorsAndPageViews(query) {
 export function fetchMostVisitedPages(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/most-visited-pages',
+    url: 'google/most-visited-pages',
     method: 'get',
     params: query
   })
@@ -31,7 +31,7 @@ export function fetchMostVisitedPages(query) {
 export function fetchTopReferrers(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/top-referrers',
+    url: 'google/top-referrers',
     method: 'get',
     params: query
   })
@@ -40,7 +40,7 @@ export function fetchTopReferrers(query) {
 export function fetchUserTypes(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/user-types',
+    url: 'google/user-types',
     method: 'get',
     params: query
   })
@@ -49,7 +49,7 @@ export function fetchUserTypes(query) {
 export function fetchTopBrowsers(query) {
   return request({
     baseURL: baseURL,
-    url: 'admin/google/top-browsers',
+    url: 'google/top-browsers',
     method: 'get',
     params: query
   })

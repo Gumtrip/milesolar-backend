@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchMessages(query) {
   return request({
-    url: 'admin/messages',
+    url: 'messages',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchMessages(query) {
 
 export function fetchMessage(id, params) {
   return request({
-    url: 'admin/messages/' + id,
+    url: 'messages/' + id,
     method: 'get',
     params: params
   })

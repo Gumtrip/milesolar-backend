@@ -47,7 +47,7 @@
           <el-switch
             v-model="postForm.status"
             active-text="上架"
-            inactive-text="下架架"
+            inactive-text="下架"
             :active-value="1"
             :inactive-value="0"
           />

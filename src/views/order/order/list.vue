@@ -20,7 +20,7 @@
 
       <el-table-column min-width="300px" label="订单号">
         <template slot-scope="scope">
-          <router-link :to="{name:'OrderCreate',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'OrderEdit',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.no }}</span>
           </router-link>
         </template>

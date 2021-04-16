@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchSettings(query) {
   return request({
-    url: 'admin/settings',
+    url: 'settings',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchSettings(query) {
 
 export function fetchSetting(id, params) {
   return request({
-    url: 'admin/settings/' + id,
+    url: 'settings/' + id,
     method: 'get',
     params: { params }
   })
@@ -18,7 +18,7 @@ export function fetchSetting(id, params) {
 
 export function createSetting(data) {
   return request({
-    url: 'admin/settings',
+    url: 'settings',
     method: 'post',
     data: data
   })
@@ -26,21 +26,21 @@ export function createSetting(data) {
 
 export function updateSetting(id, data) {
   return request({
-    url: 'admin/settings/' + id,
+    url: 'settings/' + id,
     method: 'patch',
     data: data
   })
 }
 export function deleteSetting(id) {
   return request({
-    url: 'admin/settings/' + id,
+    url: 'settings/' + id,
     method: 'delete'
   })
 }
 
 export function fetchSettingCategories(params) {
   return request({
-    url: 'admin/setting-categories',
+    url: 'setting-categories',
     method: 'get',
     params: params
   })
@@ -48,7 +48,7 @@ export function fetchSettingCategories(params) {
 
 export function fetchSettingCategory(id, params) {
   return request({
-    url: 'admin/setting-categories/' + id,
+    url: 'setting-categories/' + id,
     method: 'get',
     params: params
   })
@@ -56,7 +56,7 @@ export function fetchSettingCategory(id, params) {
 
 export function createSettingCategory(data) {
   return request({
-    url: 'admin/setting-categories',
+    url: 'setting-categories',
     method: 'post',
     data: data
   })
@@ -64,14 +64,14 @@ export function createSettingCategory(data) {
 
 export function updateSettingCategory(id, data) {
   return request({
-    url: 'admin/setting-categories/' + id,
+    url: 'setting-categories/' + id,
     method: 'patch',
     data: data
   })
 }
 export function deleteSettingCategory(id) {
   return request({
-    url: 'admin/setting-categories/' + id,
+    url: 'setting-categories/' + id,
     method: 'delete'
   })
 }
