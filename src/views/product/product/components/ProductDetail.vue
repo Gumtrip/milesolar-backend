@@ -20,7 +20,7 @@
           </el-col>
         </el-row>
         <el-form-item label="简称：">
-          <el-input v-model="postForm.short_title" type="textarea" :rows="2" placeholder="请输入简称" />
+          <el-input v-model="postForm.short_title" placeholder="请输入简称" />
         </el-form-item>
         <el-form-item prop="category_id" label="分类：">
           <cat-tree v-model="postForm.category_id" :options="categories" :default-value="postForm.category_id" />
