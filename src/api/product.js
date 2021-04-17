@@ -82,3 +82,80 @@ export function deleteProductCategory(id) {
     method: 'delete'
   })
 }
+
+//  产品属性
+export function fetchProperties(params) {
+  return request({
+    url: 'properties',
+    method: 'get',
+    params: params
+  })
+}
+
+export function fetchProperty(id, params) {
+  return request({
+    url: 'properties/' + id,
+    method: 'get',
+    params
+  })
+}
+
+export function createProperty(data) {
+  return request({
+    url: 'properties',
+    method: 'post',
+    data
+  })
+}
+
+export function updateProperty(id, data) {
+  return request({
+    url: 'properties/' + id,
+    method: 'patch',
+    data
+  })
+}
+export function deleteProperty(id) {
+  return request({
+    url: 'properties/' + id,
+    method: 'delete'
+  })
+}
+//  产品属性分类
+export function fetchPropertyCates(params) {
+  return request({
+    url: 'property-categories',
+    method: 'get',
+    params
+  })
+}
+
+export function fetchPropertyCate(id, params) {
+  return request({
+    url: 'property-categories/' + id,
+    method: 'get',
+    params
+  })
+}
+
+export function createPropertyCate(data) {
+  return request({
+    url: 'property-categories',
+    method: 'post',
+    data
+  })
+}
+
+export function updatePropertyCate(id, data) {
+  return request({
+    url: 'property-categories/' + id,
+    method: 'patch',
+    data
+  })
+}
+export function deletePropertyCate(id) {
+  return request({
+    url: 'property-categories/' + id,
+    method: 'delete'
+  })
+}
