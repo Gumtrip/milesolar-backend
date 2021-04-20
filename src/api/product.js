@@ -159,3 +159,18 @@ export function deletePropertyCate(id) {
     method: 'delete'
   })
 }
+// 为产品添加属性
+export function createProductProperty(data) {
+  return request({
+    url: 'property-properties',
+    method: 'post',
+    data
+  })
+}
+// 产品删除属性
+export function deleteProductProperty(id) {
+  return request({
+    url: 'property-properties/' + id,
+    method: 'delete'
+  })
+}

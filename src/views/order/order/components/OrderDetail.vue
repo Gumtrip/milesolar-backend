@@ -30,64 +30,6 @@
         <el-form-item v-if="isEdit" label="人民币收入:">
           <el-input v-model="postForm.rmb_total_amount" :readonly="true" class="midFormInput" type="number" placeholder="人民币收入" />
         </el-form-item>
-        <div id="itemBox">
-          <div class="mb-10">
-            <el-button type="primary" @click="showPop=true">选择产品</el-button>
-          </div>
-          <el-table
-            ref="mulTable"
-            stripe
-            fit
-            highlight-current-row
-            :data="postForm.order_items"
-            style="width: 100%"
-          >
-            <el-table-column label="序号" width="180">
-              <template slot-scope="scope">
-                <span>{{ scope.row.id }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="名称" width="180">
-              <template slot-scope="scope">
-                <span>{{ scope.row.name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" width="180">
-              <template slot-scope="scope">
-                <div class="picBox">
-                  <img :src="scope.row.img" alt="">
-                </div>
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              align="center"
-              label="产品数量"
-            >
-              <template slot-scope="scope">
-                <el-input-number v-model="postForm.order_items[scope.$index].amount" :min="1" />
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="260"
-              align="center"
-              label="实收"
-            >
-              <template slot-scope="scope">
-                <el-input v-model="postForm.order_items[scope.$index].price" class="text-center" placeholder="实收" />
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              label="操作"
-            >
-              <template slot-scope="scope">
-                <span class="delBtn pointer red-text" @click="delItem(scope.$index)">删除</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
 
         <!--订单支出-->
         <div v-if="isEdit" id="expenseBox" class="mb-20">
@@ -176,16 +118,14 @@
         </el-form-item>
       </div>
     </el-form>
-    <products v-if="postForm.order_items" :dialog="showPop" :items="postForm.order_items" @close-dia="showPop=false" @pass-items="getItems" />
     <expenses v-if="postForm.expenses" :id="expenseId" :dialog="expenseBox" :order="postForm" @close-dia="expenseBox=false" @update-order="updateOrder" />
-    <proceed v-if="postForm.expenses" :id="proceedId" :dialog="proceedBox" :order="postForm" @close-dia="proceedBox=false" @update-order="updateOrder" />
+    <proceed v-if="postForm.proceeds" :id="proceedId" :dialog="proceedBox" :order="postForm" @close-dia="proceedBox=false" @update-order="updateOrder" />
 
   </div>
 </template>
 
 <script>
 import Sticky from '@/components/Sticky'
-import Products from './Products'
 import Expenses from './Expenses'
 import Proceed from './Proceed'
 import { fetchOrder, createOrder, updateOrder, deleteOrderExpense, deleteOrderProceed } from '@/api/order'
@@ -202,7 +142,7 @@ const defaultForm = {
 
 export default {
   name: 'OrderDetail',
-  components: { Sticky, Products, Expenses, Proceed },
+  components: { Sticky, Expenses, Proceed },
   props: {
     isEdit: {
       type: Boolean,
@@ -238,7 +178,7 @@ export default {
   },
   methods: {
     async fetchData(id) {
-      const res = await fetchOrder(id, { include: 'order_items,expenses,proceeds' })
+      const res = await fetchOrder(id, { include: 'expenses,proceeds' })
       this.postForm = res.data
     },
     async getClients() {

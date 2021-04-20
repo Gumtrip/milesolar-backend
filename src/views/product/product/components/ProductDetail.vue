@@ -53,6 +53,12 @@
           />
         </el-form-item>
 
+        <!--属性-->
+        <el-form-item>
+          <el-button type="primary" @click="propertyBox=true">增加属性</el-button>
+        </el-form-item>
+        <el-form-item />
+
         <el-form-item prop="info_0_m" class="article_content">
           <label>Feature:</label>
           <Tinymce ref="editor" v-model="postForm.info_0_m" :height="400" :upload-config="uploadConfig" />
@@ -86,6 +92,8 @@
 
       </div>
     </el-form>
+    <property v-if="isEdit" :dialog="propertyBox" @close-dia="expenseBox=false" />
+
   </div>
 </template>
 
@@ -97,6 +105,7 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchProduct, createProduct, updateProduct, fetchProductCategoryTrees } from '@/api/product'
 import moment from 'moment'
 import CatTree from '@/components/CatTree' //
+import Property from './Property'
 
 const defaultForm = {
   title: '', // 产品题目
@@ -116,7 +125,7 @@ const defaultForm = {
 
 export default {
   name: 'ProductDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, CatTree },
+  components: { Tinymce, MDinput, Upload, Sticky, CatTree, Property },
   props: {
     isEdit: {
       type: Boolean,
@@ -140,6 +149,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       categories: [],
       loading: false,
+      propertyBox: false,
       uploadConfig: {
         data: {
           folder: 'product',
