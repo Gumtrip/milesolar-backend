@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="listFunBox">
       <el-form ref="form" :model="listQuery" />
-      <router-link :to="{name:'ProductCateCreate'}">
+      <router-link :to="{name:'PropertyCateCreate'}">
         <el-button type="primary">添加属性</el-button>
       </router-link>
     </div>

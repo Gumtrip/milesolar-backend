@@ -57,7 +57,20 @@
         <el-form-item>
           <el-button type="primary" @click="propertyBox=true">增加属性</el-button>
         </el-form-item>
-        <el-form-item />
+
+        <el-form-item label="属性列表">
+          <el-table :data="properties" class="listTable" fit highlight-current-row style="width: 100%">
+            <el-table-column align="center" label="属性分类" width="100" prop="title" />
+            <el-table-column align="center" label="属类">
+              <template slot-scope="scope">
+                <div v-for="(item,key) in scope.row.children" :key="key">
+                  <span class="mr-10">{{ item.title }}</span>
+                  <span class="pointer text-color" @click="deleteItem(item.pivot.id)">删除</span>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form-item>
 
         <el-form-item prop="info_0_m" class="article_content">
           <label>Feature:</label>
@@ -92,7 +105,7 @@
 
       </div>
     </el-form>
-    <property v-if="isEdit" :dialog="propertyBox" @close-dia="expenseBox=false" />
+    <property v-if="isEdit" :id="postForm.id" :dialog="propertyBox" @close-dia="propertyBox=false" @update-order="fetchData" />
 
   </div>
 </template>
@@ -102,10 +115,13 @@ import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage2'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchProduct, createProduct, updateProduct, fetchProductCategoryTrees } from '@/api/product'
+import { fetchProduct, createProduct, updateProduct, fetchProductCategoryTrees, fetchPropertyCates, deleteProductProperty } from '@/api/product'
+import { MessageBox, Notification } from 'element-ui'
+
 import moment from 'moment'
 import CatTree from '@/components/CatTree' //
 import Property from './Property'
+import _ from 'lodash'
 
 const defaultForm = {
   title: '', // 产品题目
@@ -133,23 +149,14 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + '为必传项',
-          type: 'error'
-        })
-        callback(new Error(rule.field + '为必传项'))
-      } else {
-        callback()
-      }
-    }
     return {
       id: undefined,
       postForm: Object.assign({}, defaultForm),
       categories: [],
+      propertyCates: [],
       loading: false,
       propertyBox: false,
+      properties: [],
       uploadConfig: {
         data: {
           folder: 'product',
@@ -158,11 +165,9 @@ export default {
       },
       updateDate: '',
       rules: {
-        title: [{ validator: validateRequire }],
-        category_id: [{ validator: validateRequire }],
-        desc: [{ validator: validateRequire }]
-      },
-      tempRoute: {}
+        title: [{ required: true, message: '名称是必填的', trigger: 'blur' }]
+
+      }
     }
   },
   computed: {
@@ -173,45 +178,32 @@ export default {
   },
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.id = id
-      this.fetchData(id)
+      this.id = this.$route.params && this.$route.params.id
+      this.fetchData()
     }
     this.fetchProductCategoryTrees()
-    this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    fetchData(id) {
-      fetchProduct(id, {
-        append: 'path_group,info_group'
-      }).then(response => {
-        this.postForm = response.data
-        // TODO 暂时想不到更好的方法
-        this.postForm.info_0_m = response.data.info_group.info_0_m
-        this.postForm.info_1_m = response.data.info_group.info_1_m
-        this.postForm.info_2_m = response.data.info_group.info_2_m
-        // set tagsview title
-        this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
+    async fetchData() {
+      const response = await fetchProduct(this.id, {
+        append: 'path_group,info_group',
+        include: 'properties'
       })
+      this.postForm = response.data
+      // TODO 暂时想不到更好的方法
+      this.postForm.info_0_m = response.data.info_group.info_0_m
+      this.postForm.info_1_m = response.data.info_group.info_1_m
+      this.postForm.info_2_m = response.data.info_group.info_2_m
+      const properties = this.postForm.properties
+      if (properties) {
+        this.createPropertyData(properties)
+      }
     },
     async fetchProductCategoryTrees() {
       const res = await fetchProductCategoryTrees()
       this.categories = res.data
     },
-    setTagsViewTitle() {
-      const title = '编辑产品'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
-    setPageTitle() {
-      const title = '编辑产品'
-      document.title = `${title} - ${this.postForm.id}`
-    },
+
     submitForm() {
       this.$refs.postForm.validate(async valid => {
         if (valid) {
@@ -244,7 +236,48 @@ export default {
           this.loading = false
         }
       })
+    },
+    // 生成属性数据
+    async  createPropertyData(properties) {
+      const propertyIds = []// 用来请求属性分类
+
+      const tree = _.groupBy(properties, 'property_category_id')// 将属性根据分类分组
+      properties.forEach(item => {
+        const cateId = item.property_category_id
+        if (_.indexOf(propertyIds, cateId) === -1) {
+          propertyIds.push(cateId)
+        }
+      })
+      // 获取需要的属性分类
+      const query = encodeURI({ filter: { id_in: propertyIds }})
+      const res = await fetchPropertyCates(query)
+
+      this.propertyCates = res.data.data
+      const data = []
+      this.propertyCates.forEach((cate, key) => {
+        data.push({
+          title: cate.title,
+          children: tree[cate.id]
+        })
+      })
+      this.properties = data
+    },
+
+    deleteItem(id) {
+      MessageBox.confirm('此操作将永久删除属性, 是否继续？', '提示', {
+      })
+        .then(async() => {
+          await deleteProductProperty(id)
+          Notification({
+            title: '成功',
+            message: '删除成功',
+            type: 'success'
+          })
+          this.fetchData()
+        })
+        .catch(() => {})
     }
+
   }
 }
 </script>

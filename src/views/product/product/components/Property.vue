@@ -8,12 +8,14 @@
       center
       @close="onClose"
     >
-      <el-form ref="postForm" :rules="postForm" :model="postForm" label-width="140px">
-        <el-form-item class="required" label="支出名称:" prop="title">
-          <el-input v-model="postForm.title" />
-        </el-form-item>
-      </el-form>
+      <el-table id="userTable" ref="mulTable" :data="list" stripe fit highlight-current-row style="width: 100%" class="listTable mb-20" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="50" />
+        <el-table-column align="center" label="序号" width="60" prop="id" />
+        <el-table-column align="center" label="属性名称" prop="title" />
+      </el-table>
       <div id="dia-footer">
+        <el-pagination v-show="total>0" :total="total" layout="prev,pager,next" background class="fl" @current-change="getProperties" />
+
         <el-button class="fr" @click="onClose">返回</el-button>
         <el-button class="fr mr-10" type="primary" @click="submitForm">确认添加</el-button>
         <div class="clearfix" />
@@ -26,25 +28,29 @@
 
 import { createProductProperty, fetchProperties } from '@/api/product'
 
-const defaultForm = {
-  title: null,
-  total_amount: 0,
-  remark: '',
-  id: null
-}
 export default {
   name: 'Property',
   props: {
     dialog: {
       type: Boolean,
       default: false
+    },
+    id: {
+      type: Number,
+      default: null
     }
   },
   data() {
     return {
       show: false,
-      postForm: defaultForm,
-      properties: [],
+      postForm: {},
+      list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        size: 15,
+        title: ''
+      },
       expenseRules: {
         property_id: [{ required: true, message: '属性是必填的', trigger: 'blur' }]
       }
@@ -53,13 +59,6 @@ export default {
   watch: {
     dialog(newVal, oldVal) {
       this.show = newVal
-    },
-    id(newVal, oldVal) {
-      if (newVal) {
-        this.getExpense(newVal)
-      } else {
-        this.postForm = defaultForm
-      }
     }
   },
   created() {
@@ -71,26 +70,24 @@ export default {
     },
     async submitForm() {
       try {
-        const valid = await this.$refs.postForm.validate()
-        if (valid) {
-          this.postForm.order_id = this.order.id
-          this.loading = true
-          await createProductProperty(this.postForm)
+        this.postForm.product_id = this.id
+        this.loading = true
+        await createProductProperty(this.postForm)
 
-          this.$notify({ title: '成功', message: '操作成功', type: 'success' })
-          this.$emit('update-order', true)
-          this.show = false
-        } else {
-          console.log('error submit!!')
-          this.loading = false
-        }
+        this.$notify({ title: '成功', message: '操作成功', type: 'success' })
+        this.$emit('update-order', true)
+        this.show = false
       } catch (e) {
         console.log(e)
       }
     },
     async getProperties() {
       const res = await fetchProperties()
-      this.properties = res.data
+      this.list = res.data.data
+      this.total = res.data.meta.total
+    },
+    handleSelectionChange(val) {
+      this.postForm.properties = val
     }
   }
 
