@@ -31,6 +31,12 @@
           <el-input v-model="postForm.rmb_total_amount" :readonly="true" class="midFormInput" type="number" placeholder="人民币收入" />
         </el-form-item>
 
+        <el-form-item label="关联报价订单:" class="totalAmoun midFormInput">
+          <el-select v-model="postForm.order_offer_id" filterable>
+            <el-option v-for="(offer,key) in offers" :key="key" :label="offer.no" :value="offer.id" />
+          </el-select>
+        </el-form-item>
+
         <!--订单支出-->
         <div v-if="isEdit" id="expenseBox" class="mb-20">
           <div class="mb-10">
@@ -128,7 +134,7 @@
 import Sticky from '@/components/Sticky'
 import Expenses from './Expenses'
 import Proceed from './Proceed'
-import { fetchOrder, createOrder, updateOrder, deleteOrderExpense, deleteOrderProceed } from '@/api/order'
+import { fetchOrder, createOrder, updateOrder, deleteOrderExpense, deleteOrderProceed, fetchOrderOffers } from '@/api/order'
 import { fetchClients } from '@/api/client'
 import moment from 'moment'
 
@@ -155,6 +161,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       categories: {},
       clients: {},
+      offers: [],
       expenseId: null,
       proceedId: null,
       loading: false,
@@ -175,6 +182,7 @@ export default {
       this.fetchData(id)
     }
     this.getClients()
+    this.getOffers()
   },
   methods: {
     async fetchData(id) {
@@ -239,7 +247,6 @@ export default {
         })
     },
     // 付款进度
-
     async submitForm() {
       try {
         const valid = await this.$refs.postForm.validate()
@@ -273,6 +280,10 @@ export default {
     },
     delItem(index) {
       this.postForm.order_items.splice(index, 1)
+    },
+    async getOffers() {
+      const res = await fetchOrderOffers()
+      this.offers = res.data.data
     }
   }
 }
