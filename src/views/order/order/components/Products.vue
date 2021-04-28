@@ -37,8 +37,19 @@
         </el-table-column>
         <el-table-column align="center" label="产品属性">
           <template slot-scope="scope">
-            <span v-show="!scope.row.property_show" @click="getProperty(scope.$index,scope.row.id)">显示属性</span>
-          </template>
+            <div>
+              <div v-if="scope.row.tree">
+                <div v-for="(cate,k) in scope.row.tree" :key="k">
+                  <h4>{{ cate.title }}</h4>
+                  <ul v-if="cate.children">
+                    <li v-for="(p,key) in cate.children" :key="key">
+                      <span v-text="p.title"></span>
+                      <span>删除</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div></template>
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -56,8 +67,9 @@
 </template>
 
 <script>
-import { fetchProducts, fetchProduct } from '@/api/product'
-
+import { fetchProducts, fetchPropertyCates } from '@/api/product'
+import { propertyTree } from '@/utils/product'
+import _ from 'lodash'
 export default {
   name: 'Product',
   props: {
@@ -78,20 +90,17 @@ export default {
         page: 1,
         filter: {
           title: ''
-        }
+        },
+        include: 'properties'
       },
       list: [],
       propertyCates: [],
-      multipleSelection: [],
-      initDialog: false
+      selectProperties: {}//  选中的属性
     }
   },
   watch: {
     dialog(newVal, oldVal) {
       this.show = newVal
-      if (!this.initDialog) {
-        // this.init()
-      }
     }
   },
   created() {
@@ -103,28 +112,32 @@ export default {
     },
     async getItems() {
       const res = await fetchProducts(this.listQuery)
-      this.list = res.data.data
-      this.list.forEach((item, key) => {
-        this.list[key].property_show = false
-      })
+      const list = res.data.data
       this.total = res.data.meta.total
+      const cates = await this.getPropertyCates()
+      list.forEach(async(item, key) => {
+        const ids = []// 用来存放属性分类id
+        const cateId = item.property_category_id
+        if (_.indexOf(ids, cateId) === -1) {
+          ids.push(cateId)
+        }
+        list[key].tree = await propertyTree(item.properties, cates)
+      })
+      this.list = list
     },
     async changePage(page) { // 翻页
       this.listQuery.page = page
       await this.getItems()
     },
-    handleSelectionChange(val) { // 勾选多选
-      this.multipleSelection = val
-    },
     chooseItem(item) { // 点击选择按钮
       this.show = false
-
       this.$emit('pass-items', item)
     },
-    async getProperty(index, id) {
-      this.list[index].property_show = true
-      const res = await fetchProduct(id, { include: 'properties' })
-      console.log(res.data)
+    async getPropertyCates(ids) {
+      // const query = encodeURI({ filter: { id_in: ids }})
+      // const res = await fetchPropertyCates()
+      const res = await fetchPropertyCates()
+      return res.data.data
       // 将
     }
 
