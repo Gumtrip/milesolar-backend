@@ -105,10 +105,10 @@
             </el-table-column>
             <el-table-column
               align="center"
-              label="描述"
+              label="备注"
             >
               <template slot-scope="scope">
-                <el-input v-model="postForm.items[scope.$index].desc" type="textarea" />
+                <el-input v-model="postForm.items[scope.$index].remark" type="textarea" />
               </template>
             </el-table-column>
 
