@@ -65,7 +65,7 @@
             :data="postForm.items"
             style="width: 100%"
           >
-            <el-table-column label="序号" width="180">
+            <el-table-column label="序号" width="50">
               <template slot-scope="scope">
                 <span>{{ scope.row.id }}</span>
               </template>
@@ -112,9 +112,25 @@
               </template>
             </el-table-column>
 
+            <el-table-column align="center" label="属性">
+              <template slot-scope="scope">
+                <div v-if="scope.row.attrs">
+                  <div v-for="(item,key) in scope.row.attrs" :key="key" class="attrsBox">
+                    <span class="cate">{{ item.title }}:</span>
+                    <span class="attr">
+                      <span v-for="(att,k) in item.children" :key="k">{{ att.title }}<span v-if="(item.children.length-1)>k">,</span></span>
+                    </span>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+
+              </template>
+            </el-table-column>
+
             <el-table-column
               align="center"
               label="操作"
+              width="50px"
             >
               <template slot-scope="scope">
                 <span class="delBtn pointer red-text" @click="delItem(scope.$index)">删除</span>
@@ -134,7 +150,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <products v-if="postForm.items" :dialog="showPop" :items="postForm.items" @close-dia="showPop=false" @pass-items="getItems" />
+    <products v-if="postForm.items" :order-id="id" :dialog="showPop" :items="postForm.items" @close-dia="showPop=false" @update-order="fetchData" />
 
   </div>
 </template>
@@ -196,24 +212,22 @@ export default {
   computed: {},
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.id = id
-      this.fetchData(id)
+      this.id = this.$route.params && this.$route.params.id
+      this.id = parseInt(this.id)
+      this.fetchData()
     }
     this.getClients()
   },
   methods: {
-    async fetchData(id) {
-      const res = await fetchOrderOffer(id, { include: 'items' })
+    async fetchData() {
+      const res = await fetchOrderOffer(this.id, { include: 'items' })
       this.postForm = res.data
     },
     async getClients() { // 获取客户名称
       const res = await fetchClients()
       this.clients = res.data.data
     },
-    getItems(items) { // 获取产品
-      this.postForm.items = items
-    },
+
     delItem(index) {
       this.postForm.items.splice(index, 1)
     },
@@ -271,5 +285,9 @@ export default {
   #calBox{
     label{color:$gray;font-weight: normal ;}
     li{display: flex;justify-content: space-between;font-size: 14px;margin-bottom: 6px}
+  }
+  .attrsBox{
+    .cate{;font-weight: bold}
+    .attr{}
   }
 </style>

@@ -39,14 +39,13 @@
           <template slot-scope="scope">
             <div>
               <div v-if="scope.row.tree">
-                <div v-for="(cate,k) in scope.row.tree" :key="k">
-                  <h4>{{ cate.title }}</h4>
-                  <ul v-if="cate.children">
-                    <li v-for="(p,key) in cate.children" :key="key">
-                      <span v-text="p.title"></span>
-                      <span>删除</span>
-                    </li>
-                  </ul>
+                <div v-for="(cate,k) in scope.row.tree" :key="k" class="propertyBox">
+                  <h4 class="cate">{{ cate.title }}</h4>
+                  <el-checkbox-group v-if="cate.children" v-model="selectProperties[scope.row.id]" class="properties">
+                    <div v-for="(p,key) in cate.children" :key="key" class="propertyItem">
+                      <el-checkbox v-model="selectProperties" :label="p.id">{{ p.title }}</el-checkbox>
+                    </div>
+                  </el-checkbox-group>
                 </div>
               </div>
             </div></template>
@@ -60,7 +59,7 @@
       <div id="dia-footer">
         <el-pagination v-show="total>0" :total="total" layout="prev,pager,next" background :page-size="listQuery.size" class="fl" @current-change="changePage" />
         <el-button class="fr" @click="onClose">返回</el-button>
-        <div class="clearfix" />
+        <div class="clearfix"></div>
       </div>
     </el-dialog>
   </div>
@@ -68,6 +67,7 @@
 
 <script>
 import { fetchProducts, fetchPropertyCates } from '@/api/product'
+import { createOrderOfferItem } from '@/api/order'
 import { propertyTree } from '@/utils/product'
 import _ from 'lodash'
 export default {
@@ -77,6 +77,10 @@ export default {
       type: Boolean,
       default: false
     },
+    orderId: {
+      type: Number,
+      default: null
+    },
     items: {
       type: Array,
       default: () => function() { return [] }
@@ -84,7 +88,7 @@ export default {
   },
   data() {
     return {
-      show: true,
+      show: false,
       total: 0,
       listQuery: {
         page: 1,
@@ -95,7 +99,7 @@ export default {
       },
       list: [],
       propertyCates: [],
-      selectProperties: {}//  选中的属性
+      selectProperties: []//  选中的属性
     }
   },
   watch: {
@@ -122,6 +126,7 @@ export default {
           ids.push(cateId)
         }
         list[key].tree = await propertyTree(item.properties, cates)
+        this.selectProperties[item.id] = []// 用来存放选中的属性id
       })
       this.list = list
     },
@@ -129,18 +134,21 @@ export default {
       this.listQuery.page = page
       await this.getItems()
     },
-    chooseItem(item) { // 点击选择按钮
+    async chooseItem(item) { // 点击选择按钮
+      const pids = this.selectProperties[item.id]
+      await createOrderOfferItem({
+        order_offer_id: this.orderId,
+        product_id: item.id,
+        pids: pids
+      })
       this.show = false
-      this.$emit('pass-items', item)
+      this.selectProperties[item.id] = []
+      this.$emit('update-order', true)
     },
     async getPropertyCates(ids) {
-      // const query = encodeURI({ filter: { id_in: ids }})
-      // const res = await fetchPropertyCates()
       const res = await fetchPropertyCates()
       return res.data.data
-      // 将
     }
-
   }
 
 }
@@ -154,4 +162,10 @@ export default {
   }
   #userTable{margin-bottom: 20px}
   .picBox{width: 80px;height: 80px;margin: 0 auto}
+  .propertyBox{display: flex;border-bottom: 1px solid #e5e5e5;margin-bottom: 6px;
+    &:last-child{border-bottom: none}
+    .cate{flex: 0 0 30%}
+    .properties{flex: 0 0 70%}
+  }
+  .propertyItem{display: flex;justify-content: space-around}
 </style>

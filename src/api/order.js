@@ -165,3 +165,20 @@ export function updateOrderOffer(id, data) {
     data: data
   })
 }
+
+// 订单报价-创建
+
+export function createOrderOfferItem(data) {
+  return request({
+    url: 'order-offer-items',
+    method: 'post',
+    data
+  })
+}
+// 订单报价-删除
+export function deleteOrderOfferItem(id) {
+  return request({
+    url: 'order-offer-items/' + id,
+    method: 'delete'
+  })
+}
